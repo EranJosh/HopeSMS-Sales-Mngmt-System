@@ -1,9 +1,13 @@
-import { Navigate, Outlet } from 'react-router-dom'
+import { Navigate, Outlet, useLocation } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 
 export default function ProtectedRoute() {
   const { currentUser, loading } = useAuth()
+  const location = useLocation()
 
+  // Only block on auth loading — rights load asynchronously in the background.
+  // Each page already gates its own actions via useRights(), so blocking here
+  // would delay the redirect to /sales without providing any additional safety.
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-gray-50">
@@ -14,6 +18,11 @@ export default function ProtectedRoute() {
 
   if (!currentUser) {
     return <Navigate to="/login" replace />
+  }
+
+  // USER accounts cannot access /deleted-items
+  if (location.pathname === '/deleted-items' && currentUser.user_type === 'USER') {
+    return <Navigate to="/sales" replace />
   }
 
   return <Outlet />
