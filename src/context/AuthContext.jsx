@@ -18,10 +18,11 @@ export default function AuthProvider({ children }) {
       return
     }
 
+    // PostgreSQL folds unquoted identifiers to lowercase: userId → userid
     const { data: userRow, error: dbError } = await supabase
       .from('user')
       .select('*')
-      .eq('userId', session.user.id)
+      .eq('userid', session.user.id)
       .single()
 
     if (dbError || !userRow) {
@@ -37,6 +38,7 @@ export default function AuthProvider({ children }) {
     }
 
     setError(null)
+    // Merge session.user (has .id) with userRow (has lowercase column names)
     setCurrentUser({ ...session.user, ...userRow })
   }
 
@@ -49,6 +51,7 @@ export default function AuthProvider({ children }) {
       async (event, session) => {
         if (event === 'SIGNED_IN') {
           await handleSession(session)
+          setLoading(false)
         } else if (event === 'SIGNED_OUT') {
           setCurrentUser(null)
           setLoading(false)
