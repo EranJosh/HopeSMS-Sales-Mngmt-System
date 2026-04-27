@@ -1,13 +1,14 @@
 import { Navigate, Outlet, useLocation } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
-import { useRights } from '../context/UserRightsContext'
 
 export default function ProtectedRoute() {
   const { currentUser, loading } = useAuth()
-  const { rightsLoading } = useRights()
   const location = useLocation()
 
-  if (loading || rightsLoading) {
+  // Only block on auth loading — rights load asynchronously in the background.
+  // Each page already gates its own actions via useRights(), so blocking here
+  // would delay the redirect to /sales without providing any additional safety.
+  if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-gray-50">
         <div className="w-10 h-10 border-4 border-blue-600 border-t-transparent rounded-full animate-spin" />
