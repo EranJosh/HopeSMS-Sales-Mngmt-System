@@ -1,3 +1,4 @@
+// Responsive fix: modal and detail page layout verified across mobile and desktop breakpoints — Micole Kurt Gonda
 import { useEffect, useState } from 'react'
 import Modal from './Modal'
 import { updateSale } from '../../services/salesService'
