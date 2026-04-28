@@ -1,3 +1,4 @@
+// SMS routing: /sales, /sales/:transNo, /lookups/*, /reports, /admin, /deleted-items, /auth/callback — all guarded by ProtectedRoute
 import { Routes, Route, Navigate } from 'react-router-dom'
 import ProtectedRoute from './components/ProtectedRoute'
 import AppShell from './components/AppShell'
