@@ -1,3 +1,4 @@
+/** @module salesService - getSales(userType), createSale(), updateSale(), softDeleteSale() triggers cascade, recoverSale() triggers cascade restore */
 import { supabase } from '../lib/supabaseClient'
 
 const stamp = (action) =>
