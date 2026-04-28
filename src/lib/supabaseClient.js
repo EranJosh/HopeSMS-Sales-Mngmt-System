@@ -1,3 +1,4 @@
+/** @module supabaseClient - initializes Supabase JS client from VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY */
 import { createClient } from '@supabase/supabase-js'
 
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
