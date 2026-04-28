@@ -1,4 +1,5 @@
 // LoginPage UI — email/password form + Sign in with Google button — Micole Kurt Gonda
+// Email auth: supabase.auth.signIn() wired here; login guard blocks INACTIVE accounts
 import { useState } from 'react'
 import { useNavigate, Link, Navigate } from 'react-router-dom'
 import { supabase } from '../lib/supabaseClient'
