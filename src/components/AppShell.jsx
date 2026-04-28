@@ -1,3 +1,4 @@
+// AppShell — Navbar with logout + SMS sidebar groups: Sales, Lookups, Reports, Admin, Deleted Items — Micole Kurt Gonda
 import { Outlet, NavLink } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import { useRights } from '../context/UserRightsContext'
