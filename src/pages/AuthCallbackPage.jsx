@@ -1,3 +1,4 @@
+// AuthCallbackPage — loading spinner while OAuth session exchanges — Micole Kurt Gonda
 import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabaseClient'
