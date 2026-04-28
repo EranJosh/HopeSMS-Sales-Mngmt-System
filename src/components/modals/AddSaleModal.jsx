@@ -1,3 +1,4 @@
+// AddSaleModal — salesDate + custNo dropdown (customer names) + empNo dropdown (employee names) — SALES_ADD gated — Micole Kurt Gonda
 import { useEffect, useState } from 'react'
 import Modal from './Modal'
 import { createSale } from '../../services/salesService'
