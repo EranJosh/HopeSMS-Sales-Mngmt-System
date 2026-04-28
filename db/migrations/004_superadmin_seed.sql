@@ -1,3 +1,4 @@
+-- Verification: sales=124, salesDetail~310, customer=82, employee=31, product=52, priceHist~70, SUPERADMIN rights all=1
 -- ============================================================
 -- Migration 004: SUPERADMIN Seed
 --
