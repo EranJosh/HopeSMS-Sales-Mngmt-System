@@ -1,3 +1,4 @@
+# HopeSMS ERD — 6 HopeDB table relationships
 # HopeSMS — Entity Relationship Diagram (Text-Based)
 
 All tables are in Supabase PostgreSQL (`public` schema unless noted).
