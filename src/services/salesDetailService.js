@@ -1,3 +1,4 @@
+/** @module salesDetailService - getDetailByTrans(transNo,userType), addDetailLine(), updateDetailLine(), softDeleteDetailLine(), recoverDetailLine() */
 import { supabase } from '../lib/supabaseClient'
 
 const stamp = (action) =>
