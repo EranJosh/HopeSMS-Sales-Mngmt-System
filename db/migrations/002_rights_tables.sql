@@ -1,3 +1,4 @@
+-- Rights seed: Sales_Mod, SD_Mod, Lookup_Mod, Adm_Mod | 13 rights | SUPERADMIN jcesperanza@neu.edu.ph all rights=1
 -- ============================================================
 -- Migration 002: Auth / Rights Tables
 -- Creates the user, Module, rights, user_module,
