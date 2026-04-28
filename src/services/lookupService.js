@@ -1,3 +1,4 @@
+/** @module lookupService - getCustomers(), getEmployees(), getProducts(), getCurrentPrice(prodCode) returns priceHist row with MAX(effDate) */
 import { supabase } from '../lib/supabaseClient'
 
 export async function getCustomers() {
