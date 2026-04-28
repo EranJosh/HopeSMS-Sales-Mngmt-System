@@ -1,3 +1,4 @@
+-- Trigger: provision_new_user() — creates user row USER/INACTIVE, 4 module rows, 13 rights rows (SALES_VIEW=1, SD_VIEW=1, all LOOKUP=1, all ADD/EDIT/DEL/ADM=0)
 -- ============================================================
 -- Migration 005: provision_new_user() Trigger
 -- Fires AFTER INSERT on auth.users.
