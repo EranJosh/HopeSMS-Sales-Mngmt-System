@@ -1,3 +1,4 @@
+// RegisterPage UI — First Name, Last Name, Email, Password + Google register — Micole Kurt Gonda
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { supabase } from '../lib/supabaseClient'
