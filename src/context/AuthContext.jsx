@@ -1,3 +1,4 @@
+/** @module AuthContext - wraps app, provides currentUser via supabase.auth.onAuthStateChange, login guard checks record_status=ACTIVE */
 import { createContext, useContext, useEffect, useState } from 'react'
 import { supabase } from '../lib/supabaseClient'
 
