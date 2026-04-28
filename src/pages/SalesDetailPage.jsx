@@ -1,3 +1,4 @@
+// SalesDetailPage — transaction header + line items; prodCode dropdown auto-fills unitPrice from getCurrentPrice(prodCode) — Micole Kurt Gonda
 import { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
