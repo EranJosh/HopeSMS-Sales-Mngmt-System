@@ -1,4 +1,5 @@
 // AuthCallbackPage — loading spinner while OAuth session exchanges — Micole Kurt Gonda
+// Google OAuth: supabase.auth.signInWithOAuth({provider:'google'}) + /auth/callback processes redirect + login guard
 import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabaseClient'
