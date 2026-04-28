@@ -1,3 +1,4 @@
+-- RLS sales: SELECT (USER=ACTIVE only, ADMIN/SA=all); INSERT (SALES_ADD=1); UPDATE-edit (SALES_EDIT=1); UPDATE INACTIVE (SALES_DEL=1); UPDATE ACTIVE/recover (ADMIN/SA)
 -- ============================================================
 -- Migration 007: Row-Level Security Policies
 -- Covers: sales, salesDetail, customer, employee, product, priceHist
