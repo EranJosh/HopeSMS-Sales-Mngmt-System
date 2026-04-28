@@ -1,3 +1,4 @@
+// CustomerLookupPage — read-only: custno, custname, address, payterm. Zero add/edit/delete buttons — Micole Kurt Gonda
 import { useEffect, useMemo, useState } from 'react'
 import { getCustomers } from '../services/lookupService'
 
