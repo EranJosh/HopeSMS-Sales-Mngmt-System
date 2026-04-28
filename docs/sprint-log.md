@@ -1,3 +1,4 @@
+# Sprint 1 Log — HopeSMS Setup, Auth, DB Schema
 # HopeSMS — Sprint Log
 
 **Project:** Hope, Inc. Sales Management System  
