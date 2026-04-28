@@ -1,3 +1,4 @@
+// UserRightsContext wired at app root — loads all 13 rights on login; /deleted-items route blocked for USER type
 import { createContext, useContext, useEffect, useState } from 'react'
 import { supabase } from '../lib/supabaseClient'
 import { useAuth } from './AuthContext'
