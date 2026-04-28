@@ -1,3 +1,4 @@
+// DeletedItemsPage — Transactions tab + Line Items tab; Recover buttons; sidebar link hidden for USER — Micole Kurt Gonda
 import { useEffect, useState } from 'react'
 import { Navigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
