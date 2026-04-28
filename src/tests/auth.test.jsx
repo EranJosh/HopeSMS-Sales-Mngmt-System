@@ -1,3 +1,4 @@
+// Sprint 1 auth tests: email registration, Google OAuth new user, login guard blocks INACTIVE, login guard allows ACTIVE
 import { describe, it } from 'vitest'
 
 describe('Auth Flows', () => {
