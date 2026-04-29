@@ -1,3 +1,4 @@
+-- View sales_with_lookup: JOIN sales+customer+employee+salesDetail+priceHist for enriched list. View salesdetail_with_product: JOIN salesDetail+product+current priceHist
 -- ============================================================
 -- Migration 008: SQL Views
 -- All 5 views needed for Sprint 2 (CRUD UI) and Sprint 3 (Reports)
