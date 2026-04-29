@@ -1,3 +1,4 @@
+/** @module UserRightsContext - on login queries all 13 UserModule_Rights rows; stores as {SALES_VIEW:1, SALES_ADD:1, SALES_DEL:0, SD_ADD:1, CUST_LOOKUP:1, ...} */
 // UserRightsContext wired at app root — loads all 13 rights on login; /deleted-items route blocked for USER type
 import { createContext, useContext, useEffect, useState } from 'react'
 import { supabase } from '../lib/supabaseClient'
