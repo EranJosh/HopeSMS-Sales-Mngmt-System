@@ -1,3 +1,4 @@
+# Finalized SMS User Manual — includes production screenshots for all 3 user types and all modules
 # HopeSMS — User Manual
 
 **System:** Hope, Inc. Sales Management System  
