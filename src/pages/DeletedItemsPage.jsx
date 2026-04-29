@@ -13,6 +13,13 @@ const fmtDate = d => d
   ? new Date(d + 'T00:00:00').toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })
   : '—'
 
+const CARD_STYLE = {
+  backgroundColor: '#ffffff',
+  border: '1px solid #e2e8f0',
+  borderRadius: '12px',
+  boxShadow: '0 1px 3px rgba(0,0,0,0.07), 0 4px 12px rgba(0,0,0,0.04)',
+}
+
 export default function DeletedItemsPage() {
   const { currentUser } = useAuth()
 
@@ -70,122 +77,178 @@ export default function DeletedItemsPage() {
   }
 
   const tabs = [
-    { key: 'transactions', label: `Transactions (${deletedSales.length})` },
-    { key: 'lineitems', label: `Line Items (${deletedLines.length})` },
+    { key: 'transactions', label: 'Transactions', count: deletedSales.length },
+    { key: 'lineitems', label: 'Line Items', count: deletedLines.length },
   ]
 
   return (
     <div>
-      <h1 className="text-xl font-semibold text-gray-800 mb-5">Deleted Items</h1>
+      <div className="mb-6">
+        <h1 className="text-2xl font-bold text-slate-900 tracking-tight">Deleted Items</h1>
+        <p className="text-sm text-slate-500 mt-0.5">Soft-deleted records available for recovery</p>
+      </div>
 
-      {/* Tabs */}
-      <div className="border-b border-gray-200 mb-5">
+      {/* Tab bar */}
+      <div className="flex gap-1 mb-6 p-1 rounded-xl w-fit" style={{ backgroundColor: '#f1f5f9' }}>
         {tabs.map(t => (
           <button
             key={t.key}
             onClick={() => setTab(t.key)}
-            className={`px-4 py-2 text-sm font-medium border-b-2 mr-2 transition-colors ${
-              tab === t.key
-                ? 'border-blue-600 text-blue-600'
-                : 'border-transparent text-gray-500 hover:text-gray-700'
-            }`}
+            className="px-4 py-2 text-sm font-semibold transition-all duration-150 rounded-lg cursor-pointer flex items-center gap-2"
+            style={tab === t.key
+              ? { backgroundColor: '#ffffff', color: '#059669', boxShadow: '0 1px 3px rgba(0,0,0,0.1)' }
+              : { backgroundColor: 'transparent', color: '#64748b' }
+            }
+            onMouseEnter={e => { if (tab !== t.key) e.currentTarget.style.color = '#334155' }}
+            onMouseLeave={e => { if (tab !== t.key) e.currentTarget.style.color = '#64748b' }}
           >
             {t.label}
+            <span
+              className="text-xs font-bold px-1.5 py-0.5 rounded-full"
+              style={tab === t.key
+                ? { backgroundColor: 'rgba(16,185,129,0.12)', color: '#059669' }
+                : { backgroundColor: '#e2e8f0', color: '#94a3b8' }
+              }
+            >
+              {t.count}
+            </span>
           </button>
         ))}
       </div>
 
       {loading ? (
-        <div className="flex items-center justify-center py-16">
-          <div className="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin" />
+        <div className="flex items-center justify-center py-20">
+          <div className="rounded-full animate-spin" style={{ width: 32, height: 32, borderWidth: 3, borderStyle: 'solid', borderColor: '#10b981', borderTopColor: 'transparent' }} />
         </div>
       ) : error ? (
-        <div className="p-4 bg-red-50 border border-red-200 text-red-700 rounded-lg text-sm">{error}</div>
+        <div className="px-4 py-3 rounded-xl text-red-700 text-sm font-medium" style={{ backgroundColor: '#fef2f2', border: '1px solid #fecaca' }}>{error}</div>
       ) : tab === 'transactions' ? (
-        <div className="bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm">
+        <div style={CARD_STYLE}>
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
-              <thead className="bg-gray-50 border-b border-gray-200">
-                <tr>
-                  <th className="px-4 py-3 text-left font-medium text-gray-600">Trans No</th>
-                  <th className="px-4 py-3 text-left font-medium text-gray-600">Date</th>
-                  <th className="px-4 py-3 text-left font-medium text-gray-600">Customer</th>
-                  <th className="px-4 py-3 text-left font-medium text-gray-600">Agent</th>
-                  <th className="px-4 py-3 text-right font-medium text-gray-600">Total</th>
-                  <th className="px-4 py-3 text-left font-medium text-gray-600">Stamp</th>
-                  <th className="px-4 py-3 text-center font-medium text-gray-600">Action</th>
+              <thead>
+                <tr style={{ backgroundColor: '#f8fafc', borderBottom: '1px solid #e2e8f0' }}>
+                  <th className="px-5 py-3.5 text-left text-xs font-bold text-slate-400 uppercase tracking-widest">Trans No</th>
+                  <th className="px-5 py-3.5 text-left text-xs font-bold text-slate-400 uppercase tracking-widest">Date</th>
+                  <th className="px-5 py-3.5 text-left text-xs font-bold text-slate-400 uppercase tracking-widest">Customer</th>
+                  <th className="px-5 py-3.5 text-left text-xs font-bold text-slate-400 uppercase tracking-widest">Agent</th>
+                  <th className="px-5 py-3.5 text-right text-xs font-bold text-slate-400 uppercase tracking-widest">Total</th>
+                  <th className="px-5 py-3.5 text-left text-xs font-bold text-slate-400 uppercase tracking-widest">Stamp</th>
+                  <th className="px-5 py-3.5 text-center text-xs font-bold text-slate-400 uppercase tracking-widest">Action</th>
                 </tr>
               </thead>
               <tbody>
                 {deletedSales.length === 0 ? (
-                  <tr><td colSpan={7} className="py-10 text-center text-gray-400">No deleted transactions.</td></tr>
-                ) : (
-                  deletedSales.map(s => (
-                    <tr key={s.transno} className="border-b border-gray-100 bg-red-50">
-                      <td className="px-4 py-3 font-mono text-gray-700">{s.transno}</td>
-                      <td className="px-4 py-3 text-gray-700">{fmtDate(s.salesdate)}</td>
-                      <td className="px-4 py-3 text-gray-700">{s.custname}</td>
-                      <td className="px-4 py-3 text-gray-700">{s.empname}</td>
-                      <td className="px-4 py-3 text-right text-gray-700">{fmt(s.totalamount)}</td>
-                      <td className="px-4 py-3 text-xs text-gray-400 max-w-xs truncate" title={s.stamp}>{s.stamp || '—'}</td>
-                      <td className="px-4 py-3 text-center">
-                        <button
-                          onClick={() => handleRecoverSale(s.transno)}
-                          disabled={recovering === s.transno}
-                          className="px-3 py-1 text-xs bg-green-100 text-green-700 rounded hover:bg-green-200 font-medium disabled:opacity-50"
-                        >
-                          {recovering === s.transno ? 'Recovering…' : 'Recover'}
-                        </button>
-                      </td>
-                    </tr>
-                  ))
-                )}
+                  <tr>
+                    <td colSpan={7} className="py-14 text-center">
+                      <div className="flex flex-col items-center gap-2">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#cbd5e1" strokeWidth="1.5" strokeLinecap="round">
+                          <polyline points="3 6 5 6 21 6" />
+                          <path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a1 1 0 011-1h4a1 1 0 011 1v2" />
+                        </svg>
+                        <span className="text-slate-400 text-sm">No deleted transactions</span>
+                      </div>
+                    </td>
+                  </tr>
+                ) : deletedSales.map(s => (
+                  <tr
+                    key={s.transno}
+                    className="transition-colors duration-100"
+                    style={{ borderBottom: '1px solid #f1f5f9', backgroundColor: '#fff5f5' }}
+                    onMouseEnter={e => e.currentTarget.style.backgroundColor = '#fef2f2'}
+                    onMouseLeave={e => e.currentTarget.style.backgroundColor = '#fff5f5'}
+                  >
+                    <td className="px-5 py-3.5">
+                      <span className="font-mono text-xs font-semibold px-2 py-0.5 rounded-md" style={{ backgroundColor: '#fee2e2', color: '#dc2626' }}>
+                        {s.transno}
+                      </span>
+                    </td>
+                    <td className="px-5 py-3.5 text-slate-500 text-sm">{fmtDate(s.salesdate)}</td>
+                    <td className="px-5 py-3.5 font-medium text-slate-700">{s.custname}</td>
+                    <td className="px-5 py-3.5 text-slate-500">{s.empname}</td>
+                    <td className="px-5 py-3.5 text-right font-semibold text-slate-800 tabular-nums">{fmt(s.totalamount)}</td>
+                    <td className="px-5 py-3.5 text-xs text-slate-400 max-w-xs truncate" title={s.stamp}>{s.stamp || '—'}</td>
+                    <td className="px-5 py-3.5 text-center">
+                      <button
+                        onClick={() => handleRecoverSale(s.transno)}
+                        disabled={recovering === s.transno}
+                        className="px-3 py-1.5 text-xs font-semibold rounded-lg transition-colors duration-150 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                        style={{ backgroundColor: 'rgba(16,185,129,0.08)', color: '#059669', border: '1px solid rgba(16,185,129,0.2)' }}
+                        onMouseEnter={e => { if (!e.currentTarget.disabled) e.currentTarget.style.backgroundColor = 'rgba(16,185,129,0.15)' }}
+                        onMouseLeave={e => e.currentTarget.style.backgroundColor = 'rgba(16,185,129,0.08)'}
+                      >
+                        {recovering === s.transno ? 'Recovering…' : 'Recover'}
+                      </button>
+                    </td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           </div>
         </div>
       ) : (
-        <div className="bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm">
+        <div style={CARD_STYLE}>
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
-              <thead className="bg-gray-50 border-b border-gray-200">
-                <tr>
-                  <th className="px-4 py-3 text-left font-medium text-gray-600">Trans No</th>
-                  <th className="px-4 py-3 text-left font-medium text-gray-600">Product Code</th>
-                  <th className="px-4 py-3 text-left font-medium text-gray-600">Description</th>
-                  <th className="px-4 py-3 text-right font-medium text-gray-600">Qty</th>
-                  <th className="px-4 py-3 text-right font-medium text-gray-600">Line Total</th>
-                  <th className="px-4 py-3 text-left font-medium text-gray-600">Stamp</th>
-                  <th className="px-4 py-3 text-center font-medium text-gray-600">Action</th>
+              <thead>
+                <tr style={{ backgroundColor: '#f8fafc', borderBottom: '1px solid #e2e8f0' }}>
+                  <th className="px-5 py-3.5 text-left text-xs font-bold text-slate-400 uppercase tracking-widest">Trans No</th>
+                  <th className="px-5 py-3.5 text-left text-xs font-bold text-slate-400 uppercase tracking-widest">Product Code</th>
+                  <th className="px-5 py-3.5 text-left text-xs font-bold text-slate-400 uppercase tracking-widest">Description</th>
+                  <th className="px-5 py-3.5 text-right text-xs font-bold text-slate-400 uppercase tracking-widest">Qty</th>
+                  <th className="px-5 py-3.5 text-right text-xs font-bold text-slate-400 uppercase tracking-widest">Line Total</th>
+                  <th className="px-5 py-3.5 text-left text-xs font-bold text-slate-400 uppercase tracking-widest">Stamp</th>
+                  <th className="px-5 py-3.5 text-center text-xs font-bold text-slate-400 uppercase tracking-widest">Action</th>
                 </tr>
               </thead>
               <tbody>
                 {deletedLines.length === 0 ? (
-                  <tr><td colSpan={7} className="py-10 text-center text-gray-400">No deleted line items.</td></tr>
-                ) : (
-                  deletedLines.map(l => {
-                    const key = `${l.transno}-${l.prodcode}`
-                    return (
-                      <tr key={key} className="border-b border-gray-100 bg-red-50">
-                        <td className="px-4 py-3 font-mono text-gray-700">{l.transno}</td>
-                        <td className="px-4 py-3 font-mono text-gray-700">{l.prodcode}</td>
-                        <td className="px-4 py-3 text-gray-700">{l.description}</td>
-                        <td className="px-4 py-3 text-right text-gray-700">{Number(l.quantity).toFixed(2)}</td>
-                        <td className="px-4 py-3 text-right text-gray-700">{fmt(l.linetotal)}</td>
-                        <td className="px-4 py-3 text-xs text-gray-400 max-w-xs truncate" title={l.stamp}>{l.stamp || '—'}</td>
-                        <td className="px-4 py-3 text-center">
-                          <button
-                            onClick={() => handleRecoverLine(l.transno, l.prodcode)}
-                            disabled={recovering === key}
-                            className="px-3 py-1 text-xs bg-green-100 text-green-700 rounded hover:bg-green-200 font-medium disabled:opacity-50"
-                          >
-                            {recovering === key ? 'Recovering…' : 'Recover'}
-                          </button>
-                        </td>
-                      </tr>
-                    )
-                  })
-                )}
+                  <tr>
+                    <td colSpan={7} className="py-14 text-center">
+                      <div className="flex flex-col items-center gap-2">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#cbd5e1" strokeWidth="1.5" strokeLinecap="round">
+                          <polyline points="3 6 5 6 21 6" />
+                          <path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a1 1 0 011-1h4a1 1 0 011 1v2" />
+                        </svg>
+                        <span className="text-slate-400 text-sm">No deleted line items</span>
+                      </div>
+                    </td>
+                  </tr>
+                ) : deletedLines.map(l => {
+                  const key = `${l.transno}-${l.prodcode}`
+                  return (
+                    <tr
+                      key={key}
+                      className="transition-colors duration-100"
+                      style={{ borderBottom: '1px solid #f1f5f9', backgroundColor: '#fff5f5' }}
+                      onMouseEnter={e => e.currentTarget.style.backgroundColor = '#fef2f2'}
+                      onMouseLeave={e => e.currentTarget.style.backgroundColor = '#fff5f5'}
+                    >
+                      <td className="px-5 py-3.5 font-mono text-xs text-slate-500">{l.transno}</td>
+                      <td className="px-5 py-3.5">
+                        <span className="font-mono text-xs font-semibold px-2 py-0.5 rounded-md" style={{ backgroundColor: '#fee2e2', color: '#dc2626' }}>
+                          {l.prodcode}
+                        </span>
+                      </td>
+                      <td className="px-5 py-3.5 text-slate-700 font-medium">{l.description}</td>
+                      <td className="px-5 py-3.5 text-right text-slate-600 tabular-nums">{Number(l.quantity).toFixed(2)}</td>
+                      <td className="px-5 py-3.5 text-right font-semibold text-slate-800 tabular-nums">{fmt(l.linetotal)}</td>
+                      <td className="px-5 py-3.5 text-xs text-slate-400 max-w-xs truncate" title={l.stamp}>{l.stamp || '—'}</td>
+                      <td className="px-5 py-3.5 text-center">
+                        <button
+                          onClick={() => handleRecoverLine(l.transno, l.prodcode)}
+                          disabled={recovering === key}
+                          className="px-3 py-1.5 text-xs font-semibold rounded-lg transition-colors duration-150 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                          style={{ backgroundColor: 'rgba(16,185,129,0.08)', color: '#059669', border: '1px solid rgba(16,185,129,0.2)' }}
+                          onMouseEnter={e => { if (!e.currentTarget.disabled) e.currentTarget.style.backgroundColor = 'rgba(16,185,129,0.15)' }}
+                          onMouseLeave={e => e.currentTarget.style.backgroundColor = 'rgba(16,185,129,0.08)'}
+                        >
+                          {recovering === key ? 'Recovering…' : 'Recover'}
+                        </button>
+                      </td>
+                    </tr>
+                  )
+                })}
               </tbody>
             </table>
           </div>

@@ -17,6 +17,13 @@ const fmtDate = d => d
   ? new Date(d + 'T00:00:00').toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })
   : '—'
 
+const CARD_STYLE = {
+  backgroundColor: '#ffffff',
+  border: '1px solid #e2e8f0',
+  borderRadius: '12px',
+  boxShadow: '0 1px 3px rgba(0,0,0,0.07), 0 4px 12px rgba(0,0,0,0.04)',
+}
+
 export default function SalesDetailPage() {
   const { transNo } = useParams()
   const { currentUser } = useAuth()
@@ -57,111 +64,193 @@ export default function SalesDetailPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center py-24">
-        <div className="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin" />
+        <div
+          className="rounded-full animate-spin"
+          style={{ width: 32, height: 32, borderWidth: 3, borderStyle: 'solid', borderColor: '#10b981', borderTopColor: 'transparent' }}
+        />
       </div>
     )
   }
 
   if (error) {
-    return <div className="p-4 bg-red-50 border border-red-200 text-red-700 rounded-lg text-sm">{error}</div>
+    return (
+      <div className="px-4 py-3 rounded-xl text-red-700 text-sm font-medium" style={{ backgroundColor: '#fef2f2', border: '1px solid #fecaca' }}>
+        {error}
+      </div>
+    )
   }
 
   return (
     <div>
-      {/* Back button + header */}
+      {/* Back button */}
       <button
         onClick={() => navigate('/sales')}
-        className="mb-4 flex items-center gap-1 text-sm text-blue-600 hover:underline"
+        className="mb-5 flex items-center gap-1.5 text-sm font-medium text-slate-500 transition-colors duration-150 cursor-pointer"
+        onMouseEnter={e => e.currentTarget.style.color = '#10b981'}
+        onMouseLeave={e => e.currentTarget.style.color = '#64748b'}
       >
-        ← Back to Transactions
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <polyline points="15 18 9 12 15 6" />
+        </svg>
+        Back to Transactions
       </button>
 
-      <div className="bg-white border border-gray-200 rounded-xl p-5 mb-5 shadow-sm">
-        <div className="flex items-start justify-between">
-          <div>
-            <h1 className="text-lg font-semibold text-gray-800 font-mono">{transNo}</h1>
-            <p className="text-sm text-gray-500 mt-0.5">{fmtDate(sale?.salesdate)}</p>
-          </div>
-          <div className="text-right text-sm text-gray-600">
-            <p><span className="font-medium">Customer:</span> {sale?.custname}</p>
-            <p><span className="font-medium">Agent:</span> {sale?.empname}</p>
-          </div>
+      {/* Transaction header card */}
+      <div className="mb-6" style={CARD_STYLE}>
+        <div
+          className="px-6 py-3 flex items-center gap-2"
+          style={{ borderBottom: '1px solid #f1f5f9', backgroundColor: '#fafafa', borderRadius: '12px 12px 0 0' }}
+        >
+          <span className="text-xs font-bold text-slate-400 uppercase tracking-widest">Transaction</span>
+          <span
+            className="font-mono text-xs font-bold px-2 py-0.5 rounded-md"
+            style={{ backgroundColor: 'rgba(16,185,129,0.08)', color: '#059669' }}
+          >
+            {transNo}
+          </span>
         </div>
-        {isAdmin && sale?.stamp && (
-          <p className="mt-3 text-xs text-gray-400 border-t border-gray-100 pt-2">Stamp: {sale.stamp}</p>
-        )}
+
+        <div className="px-6 py-5">
+          <div className="grid grid-cols-2 gap-6 sm:grid-cols-4">
+            <div>
+              <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-1">Date</p>
+              <p className="text-sm font-semibold text-slate-800">{fmtDate(sale?.salesdate)}</p>
+            </div>
+            <div>
+              <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-1">Customer</p>
+              <p className="text-sm font-semibold text-slate-800">{sale?.custname}</p>
+            </div>
+            <div>
+              <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-1">Sales Agent</p>
+              <p className="text-sm font-semibold text-slate-800">{sale?.empname}</p>
+            </div>
+            <div>
+              <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-1">Grand Total</p>
+              <p className="text-base font-bold" style={{ color: '#059669' }}>{fmt(grandTotal)}</p>
+            </div>
+          </div>
+
+          {isAdmin && sale?.stamp && (
+            <p className="mt-4 text-xs text-slate-400 pt-3" style={{ borderTop: '1px solid #f1f5f9' }}>
+              <span className="font-semibold uppercase tracking-wide mr-2">Stamp:</span>{sale.stamp}
+            </p>
+          )}
+        </div>
       </div>
 
-      {/* Line items */}
+      {/* Line items section */}
       <div className="flex items-center justify-between mb-3">
-        <h2 className="text-base font-semibold text-gray-700">Line Items</h2>
+        <h2 className="text-base font-bold text-slate-800 tracking-tight">Line Items</h2>
         {rights.SD_ADD === 1 && (
           <button
             onClick={() => setShowAdd(true)}
-            className="px-3 py-1.5 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium"
+            className="flex items-center gap-2 px-3.5 py-2 text-sm text-white font-semibold transition-all duration-150 rounded-lg cursor-pointer"
+            style={{ backgroundColor: '#10b981', boxShadow: '0 1px 3px rgba(16,185,129,0.3)' }}
+            onMouseEnter={e => e.currentTarget.style.backgroundColor = '#059669'}
+            onMouseLeave={e => e.currentTarget.style.backgroundColor = '#10b981'}
           >
-            + Add Line Item
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+              <line x1="12" y1="5" x2="12" y2="19" /><line x1="5" y1="12" x2="19" y2="12" />
+            </svg>
+            Add Line Item
           </button>
         )}
       </div>
 
-      <div className="bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm">
+      {/* Line items table */}
+      <div style={CARD_STYLE}>
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
-            <thead className="bg-gray-50 border-b border-gray-200">
-              <tr>
-                <th className="px-4 py-3 text-left font-medium text-gray-600">Product Code</th>
-                <th className="px-4 py-3 text-left font-medium text-gray-600">Description</th>
-                <th className="px-4 py-3 text-center font-medium text-gray-600">Unit</th>
-                <th className="px-4 py-3 text-right font-medium text-gray-600">Qty</th>
-                <th className="px-4 py-3 text-right font-medium text-gray-600">Unit Price</th>
-                <th className="px-4 py-3 text-right font-medium text-gray-600">Line Total</th>
-                {isAdmin && <th className="px-4 py-3 text-left font-medium text-gray-600">Stamp</th>}
-                <th className="px-4 py-3 text-center font-medium text-gray-600">Actions</th>
+            <thead>
+              <tr style={{ backgroundColor: '#f8fafc', borderBottom: '1px solid #e2e8f0' }}>
+                <th className="px-5 py-3.5 text-left text-xs font-bold text-slate-400 uppercase tracking-widest">Product Code</th>
+                <th className="px-5 py-3.5 text-left text-xs font-bold text-slate-400 uppercase tracking-widest">Description</th>
+                <th className="px-5 py-3.5 text-center text-xs font-bold text-slate-400 uppercase tracking-widest">Unit</th>
+                <th className="px-5 py-3.5 text-right text-xs font-bold text-slate-400 uppercase tracking-widest">Qty</th>
+                <th className="px-5 py-3.5 text-right text-xs font-bold text-slate-400 uppercase tracking-widest">Unit Price</th>
+                <th className="px-5 py-3.5 text-right text-xs font-bold text-slate-400 uppercase tracking-widest">Line Total</th>
+                {isAdmin && <th className="px-5 py-3.5 text-left text-xs font-bold text-slate-400 uppercase tracking-widest">Stamp</th>}
+                <th className="px-5 py-3.5 text-center text-xs font-bold text-slate-400 uppercase tracking-widest">Actions</th>
               </tr>
             </thead>
             <tbody>
               {lines.length === 0 ? (
                 <tr>
-                  <td colSpan={isAdmin ? 8 : 7} className="py-10 text-center text-gray-400 text-sm">
-                    No line items found.
+                  <td colSpan={isAdmin ? 8 : 7} className="py-14 text-center">
+                    <div className="flex flex-col items-center gap-2">
+                      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#cbd5e1" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z" />
+                      </svg>
+                      <span className="text-slate-400 text-sm">No line items found</span>
+                    </div>
                   </td>
                 </tr>
               ) : (
-                lines.map((l, i) => (
+                lines.map(l => (
                   <tr
                     key={`${l.transno}-${l.prodcode}`}
-                    className={`border-b border-gray-100 ${
-                      l.record_status === 'INACTIVE' ? 'bg-red-50 opacity-70' : i % 2 === 0 ? 'bg-white' : 'bg-gray-50/50'
-                    }`}
+                    className="transition-colors duration-100"
+                    style={{
+                      borderBottom: '1px solid #f1f5f9',
+                      backgroundColor: l.record_status === 'INACTIVE' ? '#fff5f5' : undefined,
+                      opacity: l.record_status === 'INACTIVE' ? 0.75 : 1,
+                    }}
+                    onMouseEnter={e => {
+                      if (l.record_status !== 'INACTIVE') e.currentTarget.style.backgroundColor = '#f0fdf4'
+                    }}
+                    onMouseLeave={e => {
+                      e.currentTarget.style.backgroundColor = l.record_status === 'INACTIVE' ? '#fff5f5' : 'transparent'
+                    }}
                   >
-                    <td className="px-4 py-3 font-mono text-gray-700">{l.prodcode}</td>
-                    <td className="px-4 py-3 text-gray-700">{l.description}</td>
-                    <td className="px-4 py-3 text-center text-gray-500">{l.unit}</td>
-                    <td className="px-4 py-3 text-right text-gray-700">{Number(l.quantity).toFixed(2)}</td>
-                    <td className="px-4 py-3 text-right text-gray-700">{fmt(l.unitprice)}</td>
-                    <td className="px-4 py-3 text-right font-medium text-gray-800">{fmt(l.linetotal)}</td>
+                    <td className="px-5 py-3.5">
+                      <span
+                        className="font-mono text-xs font-semibold px-2 py-0.5 rounded-md"
+                        style={{ backgroundColor: 'rgba(16,185,129,0.08)', color: '#059669' }}
+                      >
+                        {l.prodcode}
+                      </span>
+                    </td>
+                    <td className="px-5 py-3.5 text-slate-700 font-medium">{l.description}</td>
+                    <td className="px-5 py-3.5 text-center text-slate-500 text-xs font-medium uppercase">{l.unit}</td>
+                    <td className="px-5 py-3.5 text-right text-slate-600 tabular-nums">{Number(l.quantity).toFixed(2)}</td>
+                    <td className="px-5 py-3.5 text-right text-slate-600 tabular-nums">{fmt(l.unitprice)}</td>
+                    <td className="px-5 py-3.5 text-right font-semibold text-slate-900 tabular-nums">{fmt(l.linetotal)}</td>
                     {isAdmin && (
-                      <td className="px-4 py-3 text-xs text-gray-400 max-w-xs truncate" title={l.stamp}>
-                        {l.stamp || '—'}
+                      <td className="px-5 py-3.5 text-xs text-slate-400 max-w-xs truncate" title={l.stamp}>
+                        {l.stamp || <span className="text-slate-300">—</span>}
                       </td>
                     )}
-                    <td className="px-4 py-3 text-center">
-                      <div className="flex items-center justify-center gap-2">
+                    <td className="px-5 py-3.5 text-center">
+                      <div className="flex items-center justify-center gap-1.5">
                         {rights.SD_EDIT === 1 && l.record_status === 'ACTIVE' && (
-                          <button onClick={() => setEditLine(l)}
-                            className="px-2 py-1 text-xs bg-amber-100 text-amber-700 rounded hover:bg-amber-200 font-medium">
+                          <button
+                            onClick={() => setEditLine(l)}
+                            className="px-2.5 py-1 text-xs font-semibold rounded-md transition-colors duration-150 cursor-pointer"
+                            style={{ backgroundColor: '#fffbeb', color: '#b45309', border: '1px solid #fde68a' }}
+                            onMouseEnter={e => e.currentTarget.style.backgroundColor = '#fef3c7'}
+                            onMouseLeave={e => e.currentTarget.style.backgroundColor = '#fffbeb'}
+                          >
                             Edit
                           </button>
                         )}
                         {rights.SD_DEL === 1 && l.record_status === 'ACTIVE' && (
-                          <button onClick={() => setDeleteLine(l)}
-                            className="px-2 py-1 text-xs bg-red-100 text-red-700 rounded hover:bg-red-200 font-medium">
+                          <button
+                            onClick={() => setDeleteLine(l)}
+                            className="px-2.5 py-1 text-xs font-semibold rounded-md transition-colors duration-150 cursor-pointer"
+                            style={{ backgroundColor: '#fef2f2', color: '#dc2626', border: '1px solid #fecaca' }}
+                            onMouseEnter={e => e.currentTarget.style.backgroundColor = '#fee2e2'}
+                            onMouseLeave={e => e.currentTarget.style.backgroundColor = '#fef2f2'}
+                          >
                             Delete
                           </button>
                         )}
                         {l.record_status === 'INACTIVE' && (
-                          <span className="px-2 py-1 text-xs bg-red-100 text-red-600 rounded font-medium">INACTIVE</span>
+                          <span
+                            className="px-2.5 py-1 text-xs font-semibold rounded-md"
+                            style={{ backgroundColor: '#fef2f2', color: '#ef4444', border: '1px solid #fecaca' }}
+                          >
+                            INACTIVE
+                          </span>
                         )}
                       </div>
                     </td>
@@ -170,12 +259,16 @@ export default function SalesDetailPage() {
               )}
             </tbody>
             {lines.length > 0 && (
-              <tfoot className="bg-gray-50 border-t-2 border-gray-200">
-                <tr>
-                  <td colSpan={isAdmin ? 5 : 4} className="px-4 py-3 text-right text-sm font-semibold text-gray-700">
+              <tfoot>
+                <tr style={{ backgroundColor: '#f0fdf4', borderTop: '2px solid #bbf7d0' }}>
+                  <td
+                    colSpan={isAdmin ? 5 : 4}
+                    className="px-5 py-4 text-right text-xs font-bold uppercase tracking-widest"
+                    style={{ color: '#059669' }}
+                  >
                     Grand Total
                   </td>
-                  <td className="px-4 py-3 text-right text-base font-bold text-gray-900">
+                  <td className="px-5 py-4 text-right text-lg font-bold" style={{ color: '#065f46' }}>
                     {fmt(grandTotal)}
                   </td>
                   {isAdmin && <td />}
