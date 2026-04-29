@@ -1,3 +1,4 @@
+// Mutation-free confirmed: no SALES_ADD/EDIT/DEL or SD_ADD/EDIT/DEL checks in any lookup page component. Buttons simply do not exist in markup.
 import { useEffect, useState } from 'react'
 import { getProducts, getAllCurrentPrices } from '../services/lookupService'
 
