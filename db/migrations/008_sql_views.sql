@@ -1,3 +1,4 @@
+-- View sales_by_customer: JOIN sales+customer+salesDetail GROUP BY customer ORDER BY totalRevenue DESC. View top_products_sold: GROUP BY product ORDER BY totalRevenue DESC. View monthly_sales_trend: GROUP BY TO_CHAR(salesDate,YYYY-MM) ORDER BY saleMonth ASC
 -- View sales_with_lookup: JOIN sales+customer+employee+salesDetail+priceHist for enriched list. View salesdetail_with_product: JOIN salesDetail+product+current priceHist
 -- ============================================================
 -- Migration 008: SQL Views
