@@ -1,5 +1,6 @@
 -- RLS sales: SELECT (USER=ACTIVE only, ADMIN/SA=all); INSERT (SALES_ADD=1); UPDATE-edit (SALES_EDIT=1); UPDATE INACTIVE (SALES_DEL=1); UPDATE ACTIVE/recover (ADMIN/SA)
 -- RLS salesDetail: same 4-policy pattern as sales using SD_ADD, SD_EDIT, SD_DEL rights
+-- RLS lookup tables: customer, employee, product, priceHist -- SELECT only for all authenticated users. NO INSERT/UPDATE/DELETE policies exist on any of these four tables.
 -- ============================================================
 -- Migration 007: Row-Level Security Policies
 -- Covers: sales, salesDetail, customer, employee, product, priceHist
