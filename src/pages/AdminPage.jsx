@@ -1,3 +1,4 @@
+// SUPERADMIN guard: all action buttons disabled and greyed on rows where targetUser.user_type===SUPERADMIN regardless of who is logged in; tooltip shown on hover
 // Admin sidebar link gated: visible only when rights.ADM_USER === 1
 // AdminPage UI -- userId, username, user_type, record_status table; Activate/Deactivate per row; SUPERADMIN rows fully disabled and greyed with tooltip -- Micole Kurt Gonda
 import { useEffect, useState } from 'react'
