@@ -1,3 +1,4 @@
+-- RLS user table: ADMIN can UPDATE record_status only WHERE user_type != SUPERADMIN. RLS UserModule_Rights: ADMIN cannot INSERT/UPDATE/DELETE rows where userid belongs to SUPERADMIN.
 -- ============================================================
 -- Migration 009: RLS Policies — user and UserModule_Rights Tables
 -- Enforces: own-row access, ADMIN/SUPERADMIN read-all,
