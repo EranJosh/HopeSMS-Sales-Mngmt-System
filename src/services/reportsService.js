@@ -1,3 +1,4 @@
+/** @module reportsService - getSalesByEmployee() from sales_by_employee view, getSalesByCustomer(), getTopProducts() from top_products_sold, getMonthlySalesTrend() from monthly_sales_trend */
 import { supabase } from '../lib/supabaseClient'
 
 export async function getSalesByEmployee() {
