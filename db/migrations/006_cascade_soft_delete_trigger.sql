@@ -1,3 +1,4 @@
+-- Trigger: on sales UPDATE OF record_status -- INACTIVE cascades all salesDetail rows to INACTIVE; ACTIVE restores all salesDetail rows to ACTIVE
 -- ============================================================
 -- Migration 006: Cascade Soft-Delete / Recover Trigger
 -- When sales.record_status changes:
