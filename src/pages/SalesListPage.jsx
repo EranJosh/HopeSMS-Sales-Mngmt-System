@@ -1,3 +1,4 @@
+// Rights gating: Add Transaction (SALES_ADD), Edit (SALES_EDIT), Delete (SALES_DEL SUPERADMIN only), Add Line Item (SD_ADD), Edit line (SD_EDIT), Delete line (SD_DEL)
 // SalesListPage — transNo, salesDate, customer name, employee name, line item count, total; stamp for ADMIN/SA only; INACTIVE hidden for USER — Micole Kurt Gonda
 import { useEffect, useState, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
