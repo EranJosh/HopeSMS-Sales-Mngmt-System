@@ -1,3 +1,4 @@
+// Production regression: USER (Sales Agent), ADMIN (Sales Manager), SUPERADMIN -- all 13 rights verified, all button states, all page access restrictions in live app. Google OAuth tested in production. SUPERADMIN RLS confirmed: ADMIN direct Supabase UPDATE on SUPERADMIN row rejected.
 // Lookup test: all 3 user types visit all 4 lookup pages -- zero add/edit/delete buttons. Price autofill: select product in AddLineItemModal -- unitPrice fills from MAX(effDate) priceHist entry.
 // Cascade test: soft-delete TR000001 as SUPERADMIN, confirm all salesDetail INACTIVE. Recovery: ADMIN recovers, confirm all reappear. RLS bypass: USER getSales() without ACTIVE filter blocked.
 // Sprint 2 rights matrix: 3 user types (SUPERADMIN, ADMIN, USER) x 13 rights = 39 test cases all documented with pass/fail
