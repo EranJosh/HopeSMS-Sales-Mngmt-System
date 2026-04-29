@@ -1,3 +1,4 @@
+// Sprint 3 e2e: all 3 user types -- sales CRUD, salesDetail CRUD with lookup dropdowns + price autofill, all 4 lookup pages, all 4 reports, admin activation. SUPERADMIN protect: ADMIN attempts Activate on SA row -- disabled. Cascade verified in production with 3+ line items.
 // Production regression: USER (Sales Agent), ADMIN (Sales Manager), SUPERADMIN -- all 13 rights verified, all button states, all page access restrictions in live app. Google OAuth tested in production. SUPERADMIN RLS confirmed: ADMIN direct Supabase UPDATE on SUPERADMIN row rejected.
 // Lookup test: all 3 user types visit all 4 lookup pages -- zero add/edit/delete buttons. Price autofill: select product in AddLineItemModal -- unitPrice fills from MAX(effDate) priceHist entry.
 // Cascade test: soft-delete TR000001 as SUPERADMIN, confirm all salesDetail INACTIVE. Recovery: ADMIN recovers, confirm all reappear. RLS bypass: USER getSales() without ACTIVE filter blocked.
