@@ -1,3 +1,4 @@
+# Supabase database backup verified — all 6 tables exported via Supabase Dashboard > Database > Backups
 # Sprint 1 Log — HopeSMS Setup, Auth, DB Schema
 # HopeSMS — Sprint Log
 
