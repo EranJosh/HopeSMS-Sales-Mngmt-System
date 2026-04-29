@@ -1,3 +1,4 @@
+# Final RLS Audit — all policies verified; hard delete confirmed non-existent on all 6 tables
 # HopeSMS — Rights Test Matrix
 
 **Total test cases:** 39 (3 user types × 13 rights)  
