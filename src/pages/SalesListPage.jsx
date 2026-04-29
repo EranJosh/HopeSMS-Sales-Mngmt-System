@@ -18,6 +18,40 @@ const fmtDate = d => d
   ? new Date(d + 'T00:00:00').toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })
   : '—'
 
+const CARD_STYLE = {
+  backgroundColor: '#ffffff',
+  border: '1px solid #e2e8f0',
+  borderRadius: '12px',
+  boxShadow: '0 1px 3px rgba(0,0,0,0.07), 0 4px 12px rgba(0,0,0,0.04)',
+}
+
+const inputClass =
+  'border border-slate-200 px-3 py-2 text-sm text-slate-700 outline-none transition-all duration-150 rounded-lg placeholder-slate-400'
+
+const inputFocusStyle = {
+  borderColor: '#10b981',
+  boxShadow: '0 0 0 3px rgba(16,185,129,0.08)',
+}
+
+function FilterInput({ type = 'text', value, onChange, placeholder, label }) {
+  const [focused, setFocused] = useState(false)
+  return (
+    <div>
+      <label className="block text-xs font-semibold text-slate-500 mb-1.5 tracking-wide uppercase">{label}</label>
+      <input
+        type={type}
+        value={value}
+        onChange={onChange}
+        placeholder={placeholder}
+        className={inputClass}
+        style={focused ? inputFocusStyle : {}}
+        onFocus={() => setFocused(true)}
+        onBlur={() => setFocused(false)}
+      />
+    </div>
+  )
+}
+
 export default function SalesListPage() {
   const { currentUser } = useAuth()
   const { rights } = useRights()
@@ -62,14 +96,17 @@ export default function SalesListPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center py-24">
-        <div className="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin" />
+        <div
+          className="rounded-full animate-spin"
+          style={{ width: 32, height: 32, borderWidth: 3, borderStyle: 'solid', borderColor: '#10b981', borderTopColor: 'transparent' }}
+        />
       </div>
     )
   }
 
   if (error) {
     return (
-      <div className="p-4 bg-red-50 border border-red-200 text-red-700 rounded-lg text-sm">
+      <div className="px-4 py-3 rounded-xl text-red-700 text-sm font-medium" style={{ backgroundColor: '#fef2f2', border: '1px solid #fecaca' }}>
         Failed to load sales: {error}
       </div>
     )
@@ -77,98 +114,156 @@ export default function SalesListPage() {
 
   return (
     <div>
-      <div className="flex items-center justify-between mb-5">
-        <h1 className="text-xl font-semibold text-gray-800">Sales Transactions</h1>
+      {/* Page header */}
+      <div className="flex items-center justify-between mb-6">
+        <div>
+          <h1 className="text-2xl font-bold text-slate-900 tracking-tight">Sales Transactions</h1>
+          <p className="text-sm text-slate-500 mt-0.5">{sales.length} total transactions</p>
+        </div>
         {rights.SALES_ADD === 1 && (
           <button
             onClick={() => setShowAdd(true)}
-            className="px-4 py-2 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium"
+            className="flex items-center gap-2 px-4 py-2.5 text-sm text-white font-semibold transition-all duration-150 rounded-lg cursor-pointer"
+            style={{ backgroundColor: '#10b981', boxShadow: '0 1px 3px rgba(16,185,129,0.3)' }}
+            onMouseEnter={e => e.currentTarget.style.backgroundColor = '#059669'}
+            onMouseLeave={e => e.currentTarget.style.backgroundColor = '#10b981'}
           >
-            + Add Transaction
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+              <line x1="12" y1="5" x2="12" y2="19" /><line x1="5" y1="12" x2="19" y2="12" />
+            </svg>
+            Add Transaction
           </button>
         )}
       </div>
 
-      <div className="bg-white border border-gray-200 rounded-xl p-4 mb-4 flex flex-wrap gap-3 items-end">
-        <div>
-          <label className="block text-xs font-medium text-gray-500 mb-1">Date From</label>
-          <input type="date" value={dateFrom} onChange={e => setDateFrom(e.target.value)}
-            className="border border-gray-300 rounded px-2 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
+      {/* Filter bar */}
+      <div className="p-4 mb-5 flex flex-wrap gap-3 items-end" style={CARD_STYLE}>
+        <FilterInput
+          type="date"
+          label="Date From"
+          value={dateFrom}
+          onChange={e => setDateFrom(e.target.value)}
+        />
+        <FilterInput
+          type="date"
+          label="Date To"
+          value={dateTo}
+          onChange={e => setDateTo(e.target.value)}
+        />
+        <div className="flex-1 min-w-44">
+          <FilterInput
+            label="Customer Name"
+            value={custSearch}
+            onChange={e => setCustSearch(e.target.value)}
+            placeholder="Search customer…"
+          />
         </div>
-        <div>
-          <label className="block text-xs font-medium text-gray-500 mb-1">Date To</label>
-          <input type="date" value={dateTo} onChange={e => setDateTo(e.target.value)}
-            className="border border-gray-300 rounded px-2 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
-        </div>
-        <div className="flex-1 min-w-40">
-          <label className="block text-xs font-medium text-gray-500 mb-1">Customer Name</label>
-          <input type="text" placeholder="Search customer…" value={custSearch} onChange={e => setCustSearch(e.target.value)}
-            className="w-full border border-gray-300 rounded px-2 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
-        </div>
-        <button onClick={() => { setDateFrom(''); setDateTo(''); setCustSearch('') }}
-          className="px-3 py-1.5 text-xs text-gray-500 border border-gray-300 rounded hover:bg-gray-50">
+        <button
+          onClick={() => { setDateFrom(''); setDateTo(''); setCustSearch('') }}
+          className="px-3 py-2 text-xs font-semibold text-slate-500 border border-slate-200 rounded-lg transition-colors duration-150 cursor-pointer self-end"
+          onMouseEnter={e => e.currentTarget.style.backgroundColor = '#f8fafc'}
+          onMouseLeave={e => e.currentTarget.style.backgroundColor = 'transparent'}
+        >
           Clear
         </button>
       </div>
 
-      <div className="bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm">
+      {/* Table */}
+      <div style={CARD_STYLE}>
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
-            <thead className="bg-gray-50 border-b border-gray-200">
-              <tr>
-                <th className="px-4 py-3 text-left font-medium text-gray-600">Trans No</th>
-                <th className="px-4 py-3 text-left font-medium text-gray-600">Date</th>
-                <th className="px-4 py-3 text-left font-medium text-gray-600">Customer</th>
-                <th className="px-4 py-3 text-left font-medium text-gray-600">Sales Agent</th>
-                <th className="px-4 py-3 text-right font-medium text-gray-600">Items</th>
-                <th className="px-4 py-3 text-right font-medium text-gray-600">Total</th>
-                {isAdmin && <th className="px-4 py-3 text-left font-medium text-gray-600">Stamp</th>}
-                <th className="px-4 py-3 text-center font-medium text-gray-600">Actions</th>
+            <thead>
+              <tr style={{ backgroundColor: '#f8fafc', borderBottom: '1px solid #e2e8f0' }}>
+                <th className="px-5 py-3.5 text-left text-xs font-bold text-slate-400 uppercase tracking-widest">Trans No</th>
+                <th className="px-5 py-3.5 text-left text-xs font-bold text-slate-400 uppercase tracking-widest">Date</th>
+                <th className="px-5 py-3.5 text-left text-xs font-bold text-slate-400 uppercase tracking-widest">Customer</th>
+                <th className="px-5 py-3.5 text-left text-xs font-bold text-slate-400 uppercase tracking-widest">Sales Agent</th>
+                <th className="px-5 py-3.5 text-right text-xs font-bold text-slate-400 uppercase tracking-widest">Items</th>
+                <th className="px-5 py-3.5 text-right text-xs font-bold text-slate-400 uppercase tracking-widest">Total</th>
+                {isAdmin && <th className="px-5 py-3.5 text-left text-xs font-bold text-slate-400 uppercase tracking-widest">Stamp</th>}
+                <th className="px-5 py-3.5 text-center text-xs font-bold text-slate-400 uppercase tracking-widest">Actions</th>
               </tr>
             </thead>
             <tbody>
               {filtered.length === 0 ? (
                 <tr>
-                  <td colSpan={isAdmin ? 8 : 7} className="py-12 text-center text-gray-400 text-sm">
-                    No transactions found.
+                  <td colSpan={isAdmin ? 8 : 7} className="py-16 text-center">
+                    <div className="flex flex-col items-center gap-2">
+                      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#cbd5e1" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" />
+                        <polyline points="14 2 14 8 20 8" />
+                      </svg>
+                      <span className="text-slate-400 text-sm">No transactions found</span>
+                    </div>
                   </td>
                 </tr>
               ) : (
-                filtered.map((s, i) => (
+                filtered.map(s => (
                   <tr
                     key={s.transno}
-                    className={`border-b border-gray-100 cursor-pointer hover:bg-blue-50 transition-colors ${
-                      s.record_status === 'INACTIVE' ? 'bg-red-50 opacity-70' : i % 2 === 0 ? 'bg-white' : 'bg-gray-50/50'
-                    }`}
+                    className="cursor-pointer transition-colors duration-100"
+                    style={{
+                      borderBottom: '1px solid #f1f5f9',
+                      backgroundColor: s.record_status === 'INACTIVE' ? '#fff5f5' : undefined,
+                      opacity: s.record_status === 'INACTIVE' ? 0.75 : 1,
+                    }}
                     onClick={() => navigate(`/sales/${s.transno}`)}
+                    onMouseEnter={e => {
+                      if (s.record_status !== 'INACTIVE') e.currentTarget.style.backgroundColor = '#f0fdf4'
+                    }}
+                    onMouseLeave={e => {
+                      e.currentTarget.style.backgroundColor = s.record_status === 'INACTIVE' ? '#fff5f5' : 'transparent'
+                    }}
                   >
-                    <td className="px-4 py-3 font-mono text-blue-700 font-medium">{s.transno}</td>
-                    <td className="px-4 py-3 text-gray-700">{fmtDate(s.salesdate)}</td>
-                    <td className="px-4 py-3 text-gray-700">{s.custname}</td>
-                    <td className="px-4 py-3 text-gray-700">{s.empname}</td>
-                    <td className="px-4 py-3 text-right text-gray-700">{s.lineitemcount}</td>
-                    <td className="px-4 py-3 text-right font-medium text-gray-800">{fmt(s.totalamount)}</td>
+                    <td className="px-5 py-3.5">
+                      <span
+                        className="font-mono text-xs font-semibold px-2 py-0.5 rounded-md"
+                        style={{ backgroundColor: 'rgba(16,185,129,0.08)', color: '#059669' }}
+                      >
+                        {s.transno}
+                      </span>
+                    </td>
+                    <td className="px-5 py-3.5 text-slate-500 text-sm">{fmtDate(s.salesdate)}</td>
+                    <td className="px-5 py-3.5 font-medium text-slate-800">{s.custname}</td>
+                    <td className="px-5 py-3.5 text-slate-500">{s.empname}</td>
+                    <td className="px-5 py-3.5 text-right text-slate-600 tabular-nums">{s.lineitemcount}</td>
+                    <td className="px-5 py-3.5 text-right font-semibold text-slate-900 tabular-nums">{fmt(s.totalamount)}</td>
                     {isAdmin && (
-                      <td className="px-4 py-3 text-xs text-gray-400 max-w-xs truncate" title={s.stamp}>
-                        {s.stamp || '—'}
+                      <td className="px-5 py-3.5 text-xs text-slate-400 max-w-xs truncate" title={s.stamp}>
+                        {s.stamp || <span className="text-slate-300">—</span>}
                       </td>
                     )}
-                    <td className="px-4 py-3 text-center" onClick={e => e.stopPropagation()}>
-                      <div className="flex items-center justify-center gap-2">
+                    <td className="px-5 py-3.5 text-center" onClick={e => e.stopPropagation()}>
+                      <div className="flex items-center justify-center gap-1.5">
                         {rights.SALES_EDIT === 1 && s.record_status === 'ACTIVE' && (
-                          <button onClick={() => setEditSale(s)}
-                            className="px-2 py-1 text-xs bg-amber-100 text-amber-700 rounded hover:bg-amber-200 font-medium">
+                          <button
+                            onClick={() => setEditSale(s)}
+                            className="px-2.5 py-1 text-xs font-semibold rounded-md transition-colors duration-150 cursor-pointer"
+                            style={{ backgroundColor: '#fffbeb', color: '#b45309', border: '1px solid #fde68a' }}
+                            onMouseEnter={e => e.currentTarget.style.backgroundColor = '#fef3c7'}
+                            onMouseLeave={e => e.currentTarget.style.backgroundColor = '#fffbeb'}
+                          >
                             Edit
                           </button>
                         )}
                         {rights.SALES_DEL === 1 && s.record_status === 'ACTIVE' && (
-                          <button onClick={() => setDeleteSale(s)}
-                            className="px-2 py-1 text-xs bg-red-100 text-red-700 rounded hover:bg-red-200 font-medium">
+                          <button
+                            onClick={() => setDeleteSale(s)}
+                            className="px-2.5 py-1 text-xs font-semibold rounded-md transition-colors duration-150 cursor-pointer"
+                            style={{ backgroundColor: '#fef2f2', color: '#dc2626', border: '1px solid #fecaca' }}
+                            onMouseEnter={e => e.currentTarget.style.backgroundColor = '#fee2e2'}
+                            onMouseLeave={e => e.currentTarget.style.backgroundColor = '#fef2f2'}
+                          >
                             Delete
                           </button>
                         )}
                         {s.record_status === 'INACTIVE' && (
-                          <span className="px-2 py-1 text-xs bg-red-100 text-red-600 rounded font-medium">INACTIVE</span>
+                          <span
+                            className="px-2.5 py-1 text-xs font-semibold rounded-md"
+                            style={{ backgroundColor: '#fef2f2', color: '#ef4444', border: '1px solid #fecaca' }}
+                          >
+                            INACTIVE
+                          </span>
                         )}
                       </div>
                     </td>
@@ -178,8 +273,16 @@ export default function SalesListPage() {
             </tbody>
           </table>
         </div>
-        <div className="px-4 py-2 text-xs text-gray-400 border-t border-gray-100">
-          {filtered.length} record{filtered.length !== 1 ? 's' : ''}
+
+        {/* Table footer */}
+        <div
+          className="px-5 py-3 flex items-center justify-between"
+          style={{ borderTop: '1px solid #f1f5f9', backgroundColor: '#fafafa' }}
+        >
+          <span className="text-xs text-slate-400 font-medium">
+            Showing <span className="text-slate-600 font-semibold">{filtered.length}</span> of{' '}
+            <span className="text-slate-600 font-semibold">{sales.length}</span> record{sales.length !== 1 ? 's' : ''}
+          </span>
         </div>
       </div>
 

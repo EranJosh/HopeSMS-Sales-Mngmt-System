@@ -10,8 +10,31 @@ export default function ProtectedRoute() {
   // would delay the redirect to /sales without providing any additional safety.
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-gray-50">
-        <div className="w-10 h-10 border-4 border-blue-600 border-t-transparent rounded-full animate-spin" />
+      <div
+        className="flex flex-col items-center justify-center min-h-screen gap-4"
+        style={{ backgroundColor: '#0d1117' }}
+      >
+        <div className="flex items-center gap-3 mb-2">
+          <div
+            className="w-8 h-8 rounded-lg flex items-center justify-center font-bold text-sm"
+            style={{ backgroundColor: 'rgba(16,185,129,0.15)', color: '#10b981', border: '1px solid rgba(16,185,129,0.25)' }}
+          >
+            H
+          </div>
+          <span className="text-white font-semibold text-base tracking-tight">Hope, Inc. SMS</span>
+        </div>
+        <div
+          className="rounded-full animate-spin"
+          style={{
+            width: '36px',
+            height: '36px',
+            borderWidth: '3px',
+            borderStyle: 'solid',
+            borderColor: 'rgba(16,185,129,0.2)',
+            borderTopColor: '#10b981',
+          }}
+        />
+        <p className="text-sm font-medium" style={{ color: '#8b949e' }}>Loading…</p>
       </div>
     )
   }
