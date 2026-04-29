@@ -1,3 +1,4 @@
+// Admin sidebar link gated: visible only when rights.ADM_USER === 1
 // AdminPage UI -- userId, username, user_type, record_status table; Activate/Deactivate per row; SUPERADMIN rows fully disabled and greyed with tooltip -- Micole Kurt Gonda
 import { useEffect, useState } from 'react'
 import { Navigate } from 'react-router-dom'
