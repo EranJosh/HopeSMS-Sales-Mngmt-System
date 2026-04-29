@@ -1,3 +1,4 @@
+// Cascade test: soft-delete TR000001 as SUPERADMIN, confirm all salesDetail INACTIVE. Recovery: ADMIN recovers, confirm all reappear. RLS bypass: USER getSales() without ACTIVE filter blocked.
 // Sprint 2 rights matrix: 3 user types (SUPERADMIN, ADMIN, USER) x 13 rights = 39 test cases all documented with pass/fail
 // Sprint 1 auth tests: email registration, Google OAuth new user, login guard blocks INACTIVE, login guard allows ACTIVE
 import { describe, it } from 'vitest'
