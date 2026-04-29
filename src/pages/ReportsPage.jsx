@@ -1,3 +1,4 @@
+// ReportsPage UI -- SalesByEmployee (bar chart), SalesByCustomer (table+highlight), TopProducts (ranked list/chart), MonthlyTrend (bar chart + date filter) -- Micole Kurt Gonda
 import { useEffect, useState, useMemo } from 'react'
 import {
   getSalesByEmployee,
