@@ -1,3 +1,4 @@
+// Sprint 2 rights matrix: 3 user types (SUPERADMIN, ADMIN, USER) x 13 rights = 39 test cases all documented with pass/fail
 // Sprint 1 auth tests: email registration, Google OAuth new user, login guard blocks INACTIVE, login guard allows ACTIVE
 import { describe, it } from 'vitest'
 
