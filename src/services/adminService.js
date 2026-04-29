@@ -1,3 +1,4 @@
+/** @module adminService - getUsers(), activateUser(userId), deactivateUser(userId) -- all block SUPERADMIN rows at RLS level */
 import { supabase } from '../lib/supabaseClient'
 
 export async function getUsers() {
