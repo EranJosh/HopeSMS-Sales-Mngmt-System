@@ -1,3 +1,4 @@
+<!-- Hard delete audit: PASSED — zero .delete( calls found in src/ — confirmed 2026-04-29 -->
 # Final RLS Audit — all policies verified; hard delete confirmed non-existent on all 6 tables
 # HopeSMS — Rights Test Matrix
 
