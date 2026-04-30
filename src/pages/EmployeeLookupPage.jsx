@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { getEmployees } from '../services/lookupService'
 
-const fmtDate = d => d ? new Date(d + 'T00:00:00').toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) : '—'
+const fmtDate = d => d ? new Date(d + 'T00:00:00').toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) : ''
 
 const CARD_STYLE = {
   backgroundColor: '#ffffff',

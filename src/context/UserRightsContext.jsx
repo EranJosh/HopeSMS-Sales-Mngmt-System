@@ -1,5 +1,5 @@
 /** @module UserRightsContext - on login queries all 13 UserModule_Rights rows; stores as {SALES_VIEW:1, SALES_ADD:1, SALES_DEL:0, SD_ADD:1, CUST_LOOKUP:1, ...} */
-// UserRightsContext wired at app root — loads all 13 rights on login; /deleted-items route blocked for USER type
+// UserRightsContext wired at app root  loads all 13 rights on login; /deleted-items route blocked for USER type
 import { createContext, useContext, useEffect, useState } from 'react'
 import { supabase } from '../lib/supabaseClient'
 import { useAuth } from './AuthContext'
@@ -12,7 +12,7 @@ export function useRights() {
 
 const RIGHTS_TIMEOUT_MS = 5000
 
-// All 13 rights at full value — used for SUPERADMIN bypass
+// All 13 rights at full value  used for SUPERADMIN bypass
 const ALL_RIGHTS = {
   SALES_VIEW: 1, SALES_ADD: 1, SALES_EDIT: 1, SALES_DEL: 1,
   SD_VIEW: 1,    SD_ADD: 1,    SD_EDIT: 1,    SD_DEL: 1,
@@ -27,17 +27,17 @@ export default function UserRightsProvider({ children }) {
 
   useEffect(() => {
     if (!currentUser) {
-      console.log('[UserRightsContext] No user — clearing rights')
+      console.log('[UserRightsContext] No user  clearing rights')
       setRights({})
       setRightsLoading(false)
       return
     }
 
-    // SUPERADMIN always has every right — no DB query needed.
+    // SUPERADMIN always has every right  no DB query needed.
     // This also acts as a safety net if the 004_superadmin_seed migration ran
     // with ON CONFLICT DO NOTHING and didn't overwrite a USER-provisioned row.
     if (currentUser.user_type === 'SUPERADMIN') {
-      console.log('[UserRightsContext] SUPERADMIN detected — granting all 13 rights without DB query')
+      console.log('[UserRightsContext] SUPERADMIN detected  granting all 13 rights without DB query')
       setRights(ALL_RIGHTS)
       setRightsLoading(false)
       return
@@ -47,13 +47,13 @@ export default function UserRightsProvider({ children }) {
 
     async function loadRights() {
       // Table name: PostgreSQL folds unquoted identifiers to lowercase.
-      // The table was created as "UserModule_Rights" → stored as "usermodule_rights".
+      // The table was created as "UserModule_Rights"  stored as "usermodule_rights".
       console.log('[UserRightsContext] Loading rights from usermodule_rights for userid =', currentUser.id)
       setRightsLoading(true)
 
       const timeoutId = setTimeout(() => {
         if (!cancelled) {
-          console.warn('[UserRightsContext] Rights query timed out after 5s — proceeding with empty rights')
+          console.warn('[UserRightsContext] Rights query timed out after 5s  proceeding with empty rights')
           cancelled = true
           setRights({})
           setRightsLoading(false)
@@ -62,11 +62,11 @@ export default function UserRightsProvider({ children }) {
 
       try {
         const { data, error } = await supabase
-          .from('usermodule_rights')          // lowercase — matches PostgreSQL storage
+          .from('usermodule_rights')          // lowercase  matches PostgreSQL storage
           .select('rightid, right_value')     // lowercase column names
           .eq('userid', currentUser.id)
 
-        console.log('[UserRightsContext] Rights query result →', {
+        console.log('[UserRightsContext] Rights query result ', {
           rows: data?.length,
           error: error?.message,
           table: 'usermodule_rights',

@@ -5,7 +5,7 @@ export default function ProtectedRoute() {
   const { currentUser, loading } = useAuth()
   const location = useLocation()
 
-  // Only block on auth loading — rights load asynchronously in the background.
+  // Only block on auth loading  rights load asynchronously in the background.
   // Each page already gates its own actions via useRights(), so blocking here
   // would delay the redirect to /sales without providing any additional safety.
   if (loading) {
@@ -34,7 +34,7 @@ export default function ProtectedRoute() {
             borderTopColor: '#10b981',
           }}
         />
-        <p className="text-sm font-medium" style={{ color: '#8b949e' }}>Loading…</p>
+        <p className="text-sm font-medium" style={{ color: '#8b949e' }}>Loading</p>
       </div>
     )
   }

@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
 import { getAllPriceHistory } from '../services/lookupService'
 
-const fmt = n => n != null ? new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(n) : '—'
-const fmtDate = d => d ? new Date(d + 'T00:00:00').toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) : '—'
+const fmt = n => n != null ? new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(n) : ''
+const fmtDate = d => d ? new Date(d + 'T00:00:00').toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) : ''
 
 const CARD_STYLE = {
   backgroundColor: '#ffffff',
@@ -62,7 +62,7 @@ export default function PriceHistoryPage() {
           </svg>
           <input
             type="text"
-            placeholder="Filter by product code…"
+            placeholder="Filter by product code"
             value={search}
             onChange={e => setSearch(e.target.value)}
             className="w-full border border-slate-200 pl-9 pr-3 py-2.5 text-sm text-slate-700 placeholder-slate-400 outline-none transition-all duration-150 rounded-lg"
