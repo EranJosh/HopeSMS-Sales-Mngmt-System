@@ -236,3 +236,5 @@ export default function LoginPage() {
     </div>
   )
 }
+/ /   L o g i n P a g e   U I      e m a i l / p a s s w o r d   f o r m   +   S i g n   i n   w i t h   G o o g l e   b u t t o n      M i c o l e   K u r t   G o n d a  
+ 

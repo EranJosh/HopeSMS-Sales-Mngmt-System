@@ -303,3 +303,5 @@ The Deleted Items page has two tabs:
 | See stamp column | Yes | Yes | No |
 | See INACTIVE records | Yes | Yes | No |
 | Modify SUPERADMIN accounts | No | No | No |
+< ! - -   U s e r   M a n u a l   r e v i e w e d   a n d   f i n a l i z e d   b y   M i c o l e   K u r t   G o n d a   - - >  
+ 
