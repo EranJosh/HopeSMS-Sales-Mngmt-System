@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react'
 import { getProducts, getAllCurrentPrices } from '../services/lookupService'
 
-const fmt = n => n != null ? new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(n) : '—'
+const fmt = n => n != null ? new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(n) : ''
 
 const CARD_STYLE = {
   backgroundColor: '#ffffff',
@@ -69,7 +69,7 @@ export default function ProductLookupPage() {
           </svg>
           <input
             type="text"
-            placeholder="Search by code or name…"
+            placeholder="Search by code or name"
             value={search}
             onChange={e => setSearch(e.target.value)}
             className="w-full border border-slate-200 pl-9 pr-3 py-2.5 text-sm text-slate-700 placeholder-slate-400 outline-none transition-all duration-150 rounded-lg"

@@ -14,10 +14,10 @@ export default function AuthProvider({ children }) {
   const [error, setError] = useState(null)
 
   async function handleSession(session) {
-    console.log('[AuthContext] handleSession — session user id:', session?.user?.id ?? 'none')
+    console.log('[AuthContext] handleSession  session user id:', session?.user?.id ?? 'none')
 
     if (!session) {
-      console.log('[AuthContext] No session → clearing user')
+      console.log('[AuthContext] No session  clearing user')
       setCurrentUser(null)
       return
     }
@@ -30,16 +30,16 @@ export default function AuthProvider({ children }) {
         .eq('userid', session.user.id)
         .single()
 
-      console.log('[AuthContext] DB result →', { userRow, dbError: dbError?.message })
+      console.log('[AuthContext] DB result ', { userRow, dbError: dbError?.message })
 
       if (dbError || !userRow) {
-        console.warn('[AuthContext] User row not found or DB error — clearing user')
+        console.warn('[AuthContext] User row not found or DB error  clearing user')
         setCurrentUser(null)
         return
       }
 
       if (userRow.record_status !== 'ACTIVE') {
-        console.log('[AuthContext] User is INACTIVE — signing out')
+        console.log('[AuthContext] User is INACTIVE  signing out')
         await supabase.auth.signOut()
         setError('Your account is pending activation by a Sales Manager.')
         setCurrentUser(null)
@@ -64,7 +64,7 @@ export default function AuthProvider({ children }) {
       }
 
       console.log(
-        '[AuthContext] Setting currentUser — userid:', merged.userid,
+        '[AuthContext] Setting currentUser  userid:', merged.userid,
         '| user_type from DB:', userRow.user_type,
         '| user_type on merged object:', merged.user_type
       )
@@ -77,12 +77,12 @@ export default function AuthProvider({ children }) {
   }
 
   useEffect(() => {
-    console.log('[AuthContext] mount — restoring session')
+    console.log('[AuthContext] mount  restoring session')
 
     supabase.auth.getSession().then(({ data: { session }, error }) => {
-      console.log('[AuthContext] getSession →', session?.user?.id ?? 'no session', error?.message)
+      console.log('[AuthContext] getSession ', session?.user?.id ?? 'no session', error?.message)
       handleSession(session).finally(() => {
-        console.log('[AuthContext] initial load complete — loading = false')
+        console.log('[AuthContext] initial load complete  loading = false')
         setLoading(false)
       })
     })
@@ -90,20 +90,20 @@ export default function AuthProvider({ children }) {
     // CRITICAL: this callback must NOT be async.
     // Supabase JS v2 awaits every subscriber before resolving signInWithPassword.
     // An async callback here blocks signInWithPassword from returning,
-    // which keeps the "Signing in…" button spinning forever.
+    // which keeps the "Signing in" button spinning forever.
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (event, session) => {
-        console.log('[AuthContext] onAuthStateChange →', event, session?.user?.id)
+        console.log('[AuthContext] onAuthStateChange ', event, session?.user?.id)
 
         if (event === 'SIGNED_IN') {
           handleSession(session)
             .catch(err => console.error('[AuthContext] SIGNED_IN handler error:', err))
             .finally(() => {
-              console.log('[AuthContext] SIGNED_IN handling complete — loading = false')
+              console.log('[AuthContext] SIGNED_IN handling complete  loading = false')
               setLoading(false)
             })
         } else if (event === 'SIGNED_OUT') {
-          console.log('[AuthContext] SIGNED_OUT — clearing user')
+          console.log('[AuthContext] SIGNED_OUT  clearing user')
           setCurrentUser(null)
           setLoading(false)
         }

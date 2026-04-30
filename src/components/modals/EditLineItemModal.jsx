@@ -2,7 +2,7 @@ import { useState } from 'react'
 import Modal from './Modal'
 import { updateDetailLine } from '../../services/salesDetailService'
 
-const fmt = n => n != null ? `$${Number(n).toFixed(2)}` : '—'
+const fmt = n => n != null ? `$${Number(n).toFixed(2)}` : ''
 
 export default function EditLineItemModal({ line, onClose, onSuccess }) {
   const [quantity, setQuantity] = useState(String(line.quantity || ''))
@@ -25,7 +25,7 @@ export default function EditLineItemModal({ line, onClose, onSuccess }) {
   }
 
   return (
-    <Modal title={`Edit Line Item — ${line.prodcode}`} onClose={onClose} maxWidth="max-w-md">
+    <Modal title={`Edit Line Item  ${line.prodcode}`} onClose={onClose} maxWidth="max-w-md">
       {error && (
         <div className="mb-4 p-3 bg-red-50 border border-red-200 text-red-700 text-sm rounded">
           {error}
@@ -62,7 +62,7 @@ export default function EditLineItemModal({ line, onClose, onSuccess }) {
             disabled={submitting}
             className="px-4 py-2 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
           >
-            {submitting ? 'Saving…' : 'Save Changes'}
+            {submitting ? 'Saving' : 'Save Changes'}
           </button>
         </div>
       </form>

@@ -1,5 +1,5 @@
 // Stamp hidden when currentUser.user_type=USER in SalesListPage and SalesDetailPage. Sidebar: Deleted Items + Admin links hidden for USER.
-// AppShell — Sidebar navigation with icons + top header — Micole Kurt Gonda
+// AppShell  Sidebar navigation with icons + top header  Micole Kurt Gonda
 import { Outlet, NavLink } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import { useRights } from '../context/UserRightsContext'
@@ -284,5 +284,3 @@ export default function AppShell() {
     </div>
   )
 }
-/ /   A p p S h e l l      N a v b a r   w i t h   l o g o u t   +   S M S   s i d e b a r   g r o u p s :   S a l e s ,   L o o k u p s ,   R e p o r t s ,   A d m i n ,   D e l e t e d   I t e m s      M i c o l e   K u r t   G o n d a  
- 
