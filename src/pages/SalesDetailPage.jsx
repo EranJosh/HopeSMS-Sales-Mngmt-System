@@ -286,3 +286,5 @@ export default function SalesDetailPage() {
     </div>
   )
 }
+/ /   S a l e s D e t a i l P a g e      t r a n s a c t i o n   h e a d e r   +   l i n e   i t e m s   +   p r i c e   a u t o f i l l   f r o m   g e t C u r r e n t P r i c e      M i c o l e   K u r t   G o n d a  
+ 
