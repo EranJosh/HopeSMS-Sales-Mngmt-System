@@ -1,4 +1,4 @@
-// CustomerLookupPage — read-only: custno, custname, address, payterm. Zero add/edit/delete buttons — Micole Kurt Gonda
+// CustomerLookupPage  read-only: custno, custname, address, payterm. Zero add/edit/delete buttons  Micole Kurt Gonda
 import { useEffect, useMemo, useState } from 'react'
 import { getCustomers } from '../services/lookupService'
 
@@ -88,7 +88,7 @@ export default function CustomerLookupPage() {
           </svg>
           <input
             type="text"
-            placeholder="Search by customer name…"
+            placeholder="Search by customer name"
             value={search}
             onChange={e => setSearch(e.target.value)}
             className="w-full border border-slate-200 pl-9 pr-3 py-2.5 text-sm text-slate-700 placeholder-slate-400 outline-none transition-all duration-150 rounded-lg"

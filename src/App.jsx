@@ -1,4 +1,4 @@
-// SMS routing: /sales, /sales/:transNo, /lookups/*, /reports, /admin, /deleted-items, /auth/callback — all guarded by ProtectedRoute
+// SMS routing: /sales, /sales/:transNo, /lookups/*, /reports, /admin, /deleted-items, /auth/callback  all guarded by ProtectedRoute
 // Error boundary and loading state components applied to all data-fetching pages
 import { Routes, Route, Navigate } from 'react-router-dom'
 import ProtectedRoute from './components/ProtectedRoute'
@@ -26,7 +26,7 @@ export default function App() {
       <Route path="/register" element={<RegisterPage />} />
       <Route path="/auth/callback" element={<AuthCallbackPage />} />
 
-      {/* Protected routes — wrapped in AppShell layout */}
+      {/* Protected routes  wrapped in AppShell layout */}
       <Route element={<ProtectedRoute />}>
         <Route element={<AppShell />}>
           <Route index element={<Navigate to="/sales" replace />} />

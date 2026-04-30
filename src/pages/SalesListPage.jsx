@@ -1,6 +1,6 @@
 // UI polish: loading skeletons, empty states (No transactions found, No data for this period), error toasts, mobile verified -- Micole Kurt Gonda
 // Rights gating: Add Transaction (SALES_ADD), Edit (SALES_EDIT), Delete (SALES_DEL SUPERADMIN only), Add Line Item (SD_ADD), Edit line (SD_EDIT), Delete line (SD_DEL)
-// SalesListPage — transNo, salesDate, customer name, employee name, line item count, total; stamp for ADMIN/SA only; INACTIVE hidden for USER — Micole Kurt Gonda
+// SalesListPage  transNo, salesDate, customer name, employee name, line item count, total; stamp for ADMIN/SA only; INACTIVE hidden for USER  Micole Kurt Gonda
 import { useEffect, useState, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
@@ -12,11 +12,11 @@ import SoftDeleteSaleDialog from '../components/modals/SoftDeleteSaleDialog'
 
 const fmt = n => n != null
   ? new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(n)
-  : '—'
+  : ''
 
 const fmtDate = d => d
   ? new Date(d + 'T00:00:00').toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })
-  : '—'
+  : ''
 
 const CARD_STYLE = {
   backgroundColor: '#ffffff',
@@ -155,7 +155,7 @@ export default function SalesListPage() {
             label="Customer Name"
             value={custSearch}
             onChange={e => setCustSearch(e.target.value)}
-            placeholder="Search customer…"
+            placeholder="Search customer"
           />
         </div>
         <button
@@ -230,7 +230,7 @@ export default function SalesListPage() {
                     <td className="px-5 py-3.5 text-right font-semibold text-slate-900 tabular-nums">{fmt(s.totalamount)}</td>
                     {isAdmin && (
                       <td className="px-5 py-3.5 text-xs text-slate-400 max-w-xs truncate" title={s.stamp}>
-                        {s.stamp || <span className="text-slate-300">—</span>}
+                        {s.stamp || <span className="text-slate-300"></span>}
                       </td>
                     )}
                     <td className="px-5 py-3.5 text-center" onClick={e => e.stopPropagation()}>

@@ -1,4 +1,4 @@
-// AddSaleModal — salesDate + custNo dropdown (customer names) + empNo dropdown (employee names) — SALES_ADD gated — Micole Kurt Gonda
+// AddSaleModal  salesDate + custNo dropdown (customer names) + empNo dropdown (employee names)  SALES_ADD gated  Micole Kurt Gonda
 import { useEffect, useState } from 'react'
 import Modal from './Modal'
 import { createSale } from '../../services/salesService'
@@ -59,7 +59,7 @@ export default function AddSaleModal({ onClose, onSuccess }) {
             onChange={e => setCustno(e.target.value)}
             className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
-            <option value="">— Select customer —</option>
+            <option value=""> Select customer </option>
             {customers.map(c => (
               <option key={c.custno} value={c.custno}>{c.custname}</option>
             ))}
@@ -73,7 +73,7 @@ export default function AddSaleModal({ onClose, onSuccess }) {
             onChange={e => setEmpno(e.target.value)}
             className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
-            <option value="">— Select employee —</option>
+            <option value=""> Select employee </option>
             {employees.map(e => (
               <option key={e.empno} value={e.empno}>{e.lastname}, {e.firstname}</option>
             ))}
@@ -88,7 +88,7 @@ export default function AddSaleModal({ onClose, onSuccess }) {
             disabled={submitting}
             className="px-4 py-2 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
           >
-            {submitting ? 'Saving…' : 'Add Transaction'}
+            {submitting ? 'Saving' : 'Add Transaction'}
           </button>
         </div>
       </form>

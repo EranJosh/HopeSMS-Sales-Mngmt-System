@@ -9,7 +9,7 @@ import {
 
 const fmt = n => n != null
   ? new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(n)
-  : '—'
+  : ''
 
 const CARD_STYLE = {
   backgroundColor: '#ffffff',

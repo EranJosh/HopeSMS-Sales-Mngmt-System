@@ -1,4 +1,4 @@
-// RegisterPage UI — First Name, Last Name, Email, Password + Google register — Micole Kurt Gonda
+// RegisterPage UI -- First Name, Last Name, Email, Password + Google register -- Micole Kurt Gonda
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { supabase } from '../lib/supabaseClient'
@@ -60,7 +60,7 @@ const LeftPanel = () => (
         Your sales,<br />organized.
       </h2>
       <p className="text-sm leading-relaxed mb-10" style={{ color: '#8b949e' }}>
-        A streamlined sales management system built for Hope, Inc. — track transactions,
+        A streamlined sales management system built for Hope, Inc. -- track transactions,
         customers, and reports in one place.
       </p>
 
@@ -257,7 +257,7 @@ export default function RegisterPage() {
                 onMouseEnter={e => !submitting && (e.currentTarget.style.backgroundColor = '#059669')}
                 onMouseLeave={e => !submitting && (e.currentTarget.style.backgroundColor = '#10b981')}
               >
-                {submitting ? 'Creating account…' : 'Create account'}
+                {submitting ? 'Creating account...' : 'Create account'}
               </button>
             </form>
 
@@ -295,5 +295,3 @@ export default function RegisterPage() {
     </div>
   )
 }
-/ /   R e g i s t e r P a g e   U I      F i r s t   N a m e ,   L a s t   N a m e ,   E m a i l ,   P a s s w o r d   +   G o o g l e   r e g i s t e r      M i c o l e   K u r t   G o n d a  
- 

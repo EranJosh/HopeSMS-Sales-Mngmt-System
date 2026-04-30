@@ -1,4 +1,4 @@
-// SalesDetailPage — transaction header + line items; prodCode dropdown auto-fills unitPrice from getCurrentPrice(prodCode) — Micole Kurt Gonda
+// SalesDetailPage  transaction header + line items; prodCode dropdown auto-fills unitPrice from getCurrentPrice(prodCode)  Micole Kurt Gonda
 import { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
@@ -11,11 +11,11 @@ import SoftDeleteDetailDialog from '../components/modals/SoftDeleteDetailDialog'
 
 const fmt = n => n != null
   ? new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(n)
-  : '—'
+  : ''
 
 const fmtDate = d => d
   ? new Date(d + 'T00:00:00').toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })
-  : '—'
+  : ''
 
 const CARD_STYLE = {
   backgroundColor: '#ffffff',
@@ -217,7 +217,7 @@ export default function SalesDetailPage() {
                     <td className="px-5 py-3.5 text-right font-semibold text-slate-900 tabular-nums">{fmt(l.linetotal)}</td>
                     {isAdmin && (
                       <td className="px-5 py-3.5 text-xs text-slate-400 max-w-xs truncate" title={l.stamp}>
-                        {l.stamp || <span className="text-slate-300">—</span>}
+                        {l.stamp || <span className="text-slate-300"></span>}
                       </td>
                     )}
                     <td className="px-5 py-3.5 text-center">
