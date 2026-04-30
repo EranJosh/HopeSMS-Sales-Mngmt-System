@@ -144,7 +144,7 @@ export default function AdminPage() {
                             onMouseEnter={e => { if (!e.currentTarget.disabled) e.currentTarget.style.backgroundColor = 'rgba(16,185,129,0.15)' }}
                             onMouseLeave={e => e.currentTarget.style.backgroundColor = 'rgba(16,185,129,0.08)'}
                           >
-                            {actioning === u.userid ? '…' : 'Activate'}
+                            {actioning === u.userid ? '' : 'Activate'}
                           </button>
                           <button
                             onClick={() => handleAction(u.userid, 'deactivate')}
@@ -154,7 +154,7 @@ export default function AdminPage() {
                             onMouseEnter={e => { if (!e.currentTarget.disabled) e.currentTarget.style.backgroundColor = '#fee2e2' }}
                             onMouseLeave={e => e.currentTarget.style.backgroundColor = '#fef2f2'}
                           >
-                            {actioning === u.userid ? '…' : 'Deactivate'}
+                            {actioning === u.userid ? '' : 'Deactivate'}
                           </button>
                         </div>
                       )}
@@ -174,5 +174,3 @@ export default function AdminPage() {
     </div>
   )
 }
-/ /   A d m i n P a g e   U I      u s e r I d ,   u s e r n a m e ,   u s e r _ t y p e ,   r e c o r d _ s t a t u s   t a b l e ;   S U P E R A D M I N   r o w s   d i s a b l e d      M i c o l e   K u r t   G o n d a  
- 

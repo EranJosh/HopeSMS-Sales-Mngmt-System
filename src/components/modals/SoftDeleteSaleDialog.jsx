@@ -40,7 +40,7 @@ export default function SoftDeleteSaleDialog({ sale, onClose, onSuccess }) {
           disabled={submitting}
           className="px-4 py-2 text-sm bg-red-600 text-white rounded-lg hover:bg-red-700 disabled:opacity-50"
         >
-          {submitting ? 'Deleting…' : 'Delete Transaction'}
+          {submitting ? 'Deleting' : 'Delete Transaction'}
         </button>
       </div>
     </Modal>
