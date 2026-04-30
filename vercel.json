@@ -1,5 +1,4 @@
 {
-  "note": "Production: hopesms.vercel.app | VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY set in Vercel env | /auth/callback registered in Supabase Redirect URLs",
   "rewrites": [
     { "source": "/(.*)", "destination": "/index.html" }
   ]
