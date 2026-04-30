@@ -295,3 +295,5 @@ export default function RegisterPage() {
     </div>
   )
 }
+/ /   R e g i s t e r P a g e   U I      F i r s t   N a m e ,   L a s t   N a m e ,   E m a i l ,   P a s s w o r d   +   G o o g l e   r e g i s t e r      M i c o l e   K u r t   G o n d a  
+ 
