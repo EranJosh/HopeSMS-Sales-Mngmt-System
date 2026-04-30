@@ -292,3 +292,5 @@ export default function SalesListPage() {
     </div>
   )
 }
+/ /   S a l e s L i s t P a g e      t r a n s N o ,   s a l e s D a t e ,   c u s t o m e r   n a m e ,   e m p l o y e e   n a m e ,   s t a m p   f o r   A D M I N / S A   o n l y      M i c o l e   K u r t   G o n d a  
+ 
