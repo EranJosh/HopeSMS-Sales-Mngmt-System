@@ -1,4 +1,4 @@
-// DeletedItemsPage  Transactions tab + Line Items tab; Recover buttons; sidebar link hidden for USER  Micole Kurt Gonda
+// DeletedItemsPage -- Transactions tab + Line Items tab; Recover buttons; sidebar link hidden for USER -- Micole Kurt Gonda
 import { useEffect, useState } from 'react'
 import { Navigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
@@ -7,11 +7,11 @@ import { getDeletedDetailLines, recoverDetailLine } from '../services/salesDetai
 
 const fmt = n => n != null
   ? new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(n)
-  : ''
+  : '--'
 
 const fmtDate = d => d
   ? new Date(d + 'T00:00:00').toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })
-  : ''
+  : '--'
 
 const CARD_STYLE = {
   backgroundColor: '#ffffff',
@@ -23,7 +23,7 @@ const CARD_STYLE = {
 export default function DeletedItemsPage() {
   const { currentUser } = useAuth()
 
-  // USER accounts are blocked  redirect enforced here as well as in ProtectedRoute
+  // USER accounts are blocked -- redirect enforced here as well as in ProtectedRoute
   if (currentUser?.user_type === 'USER') {
     return <Navigate to="/sales" replace />
   }
@@ -167,7 +167,7 @@ export default function DeletedItemsPage() {
                     <td className="px-5 py-3.5 font-medium text-slate-700">{s.custname}</td>
                     <td className="px-5 py-3.5 text-slate-500">{s.empname}</td>
                     <td className="px-5 py-3.5 text-right font-semibold text-slate-800 tabular-nums">{fmt(s.totalamount)}</td>
-                    <td className="px-5 py-3.5 text-xs text-slate-400 max-w-xs truncate" title={s.stamp}>{s.stamp || ''}</td>
+                    <td className="px-5 py-3.5 text-xs text-slate-400 max-w-xs truncate" title={s.stamp}>{s.stamp || '--'}</td>
                     <td className="px-5 py-3.5 text-center">
                       <button
                         onClick={() => handleRecoverSale(s.transno)}
@@ -177,7 +177,7 @@ export default function DeletedItemsPage() {
                         onMouseEnter={e => { if (!e.currentTarget.disabled) e.currentTarget.style.backgroundColor = 'rgba(16,185,129,0.15)' }}
                         onMouseLeave={e => e.currentTarget.style.backgroundColor = 'rgba(16,185,129,0.08)'}
                       >
-                        {recovering === s.transno ? 'Recovering' : 'Recover'}
+                        {recovering === s.transno ? 'Recovering...' : 'Recover'}
                       </button>
                     </td>
                   </tr>
@@ -233,7 +233,7 @@ export default function DeletedItemsPage() {
                       <td className="px-5 py-3.5 text-slate-700 font-medium">{l.description}</td>
                       <td className="px-5 py-3.5 text-right text-slate-600 tabular-nums">{Number(l.quantity).toFixed(2)}</td>
                       <td className="px-5 py-3.5 text-right font-semibold text-slate-800 tabular-nums">{fmt(l.linetotal)}</td>
-                      <td className="px-5 py-3.5 text-xs text-slate-400 max-w-xs truncate" title={l.stamp}>{l.stamp || ''}</td>
+                      <td className="px-5 py-3.5 text-xs text-slate-400 max-w-xs truncate" title={l.stamp}>{l.stamp || '--'}</td>
                       <td className="px-5 py-3.5 text-center">
                         <button
                           onClick={() => handleRecoverLine(l.transno, l.prodcode)}
@@ -243,7 +243,7 @@ export default function DeletedItemsPage() {
                           onMouseEnter={e => { if (!e.currentTarget.disabled) e.currentTarget.style.backgroundColor = 'rgba(16,185,129,0.15)' }}
                           onMouseLeave={e => e.currentTarget.style.backgroundColor = 'rgba(16,185,129,0.08)'}
                         >
-                          {recovering === key ? 'Recovering' : 'Recover'}
+                          {recovering === key ? 'Recovering...' : 'Recover'}
                         </button>
                       </td>
                     </tr>

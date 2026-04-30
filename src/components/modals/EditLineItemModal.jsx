@@ -3,6 +3,7 @@ import Modal from './Modal'
 import { updateDetailLine } from '../../services/salesDetailService'
 
 const fmt = n => n != null ? `$${Number(n).toFixed(2)}` : ''
+const labelClass = 'block text-xs font-semibold text-slate-600 mb-1.5 tracking-wide'
 
 export default function EditLineItemModal({ line, onClose, onSuccess }) {
   const [quantity, setQuantity] = useState(String(line.quantity || ''))
@@ -25,24 +26,24 @@ export default function EditLineItemModal({ line, onClose, onSuccess }) {
   }
 
   return (
-    <Modal title={`Edit Line Item  ${line.prodcode}`} onClose={onClose} maxWidth="max-w-md">
+    <Modal title={`Edit Line Item - ${line.prodcode}`} onClose={onClose} maxWidth="max-w-md">
       {error && (
-        <div className="mb-4 p-3 bg-red-50 border border-red-200 text-red-700 text-sm rounded">
+        <div className="mb-4 px-3.5 py-2.5 bg-red-50 border border-red-200 text-red-700 text-xs font-medium rounded-lg">
           {error}
         </div>
       )}
-      <p className="text-sm text-gray-600 mb-4">{line.description}</p>
+      <p className="text-sm text-slate-500 mb-4">{line.description}</p>
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Unit Price</label>
+          <label className={labelClass}>Unit Price</label>
           <input
             readOnly
             value={fmt(line.unitprice)}
-            className="w-full border border-gray-200 bg-gray-50 rounded-lg px-3 py-2 text-sm text-gray-500"
+            className="w-full border border-slate-200 bg-slate-50 rounded-lg px-3.5 py-2.5 text-sm text-slate-400"
           />
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Quantity</label>
+          <label className={labelClass}>Quantity</label>
           <input
             type="number"
             required
@@ -50,19 +51,26 @@ export default function EditLineItemModal({ line, onClose, onSuccess }) {
             step="0.01"
             value={quantity}
             onChange={e => setQuantity(e.target.value)}
-            className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full border border-slate-200 rounded-lg px-3.5 py-2.5 text-sm text-slate-900 outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all duration-150"
           />
         </div>
         <div className="flex justify-end gap-3 pt-2">
-          <button type="button" onClick={onClose} className="px-4 py-2 text-sm text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50">
+          <button
+            type="button"
+            onClick={onClose}
+            className="px-4 py-2 text-sm font-medium text-slate-600 border border-slate-200 rounded-lg hover:bg-slate-50 transition-all duration-150"
+          >
             Cancel
           </button>
           <button
             type="submit"
             disabled={submitting}
-            className="px-4 py-2 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
+            className="px-4 py-2 text-sm font-semibold text-white rounded-lg disabled:opacity-50 transition-all duration-150"
+            style={{ backgroundColor: '#10b981' }}
+            onMouseEnter={e => { if (!submitting) e.currentTarget.style.backgroundColor = '#059669' }}
+            onMouseLeave={e => { if (!submitting) e.currentTarget.style.backgroundColor = '#10b981' }}
           >
-            {submitting ? 'Saving' : 'Save Changes'}
+            {submitting ? 'Saving...' : 'Save Changes'}
           </button>
         </div>
       </form>

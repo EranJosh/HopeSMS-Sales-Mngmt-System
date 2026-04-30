@@ -1,4 +1,4 @@
-// LoginPage UI  email/password form + Sign in with Google button  Micole Kurt Gonda
+// LoginPage UI -- email/password form + Sign in with Google button -- Micole Kurt Gonda
 // Email auth: supabase.auth.signIn() wired here; login guard blocks INACTIVE accounts
 import { useState } from 'react'
 import { useNavigate, Link, Navigate } from 'react-router-dom'
@@ -63,7 +63,7 @@ function BrandPanel() {
           Your sales,<br />organized.
         </h2>
         <p className="text-sm leading-relaxed mb-10" style={{ color: '#8b949e' }}>
-          A streamlined sales management system built for Hope, Inc.  track transactions,
+          A streamlined sales management system built for Hope, Inc. -- track transactions,
           customers, and reports in one place.
         </p>
 
@@ -186,7 +186,7 @@ export default function LoginPage() {
                   required
                   value={password}
                   onChange={e => setPassword(e.target.value)}
-                  placeholder=""
+                  placeholder="••••••••"
                 />
               </div>
 
@@ -198,7 +198,7 @@ export default function LoginPage() {
                 onMouseEnter={e => !submitting && (e.currentTarget.style.backgroundColor = '#059669')}
                 onMouseLeave={e => !submitting && (e.currentTarget.style.backgroundColor = '#10b981')}
               >
-                {submitting ? 'Signing in' : 'Sign in'}
+                {submitting ? 'Signing in...' : 'Sign in'}
               </button>
             </form>
 

@@ -3,6 +3,10 @@ import Modal from './Modal'
 import { addDetailLine } from '../../services/salesDetailService'
 import { getProducts, getCurrentPrice } from '../../services/lookupService'
 
+const labelClass = 'block text-xs font-semibold text-slate-600 mb-1.5 tracking-wide'
+const inputClass = 'w-full border border-slate-200 rounded-lg px-3.5 py-2.5 text-sm text-slate-900 outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all duration-150'
+const readonlyClass = 'w-full border border-slate-200 bg-slate-50 rounded-lg px-3.5 py-2.5 text-sm text-slate-400'
+
 export default function AddLineItemModal({ transno, onClose, onSuccess }) {
   const [prodcode, setProdcode] = useState('')
   const [quantity, setQuantity] = useState('')
@@ -46,35 +50,36 @@ export default function AddLineItemModal({ transno, onClose, onSuccess }) {
   return (
     <Modal title="Add Line Item" onClose={onClose}>
       {error && (
-        <div className="mb-4 p-3 bg-red-50 border border-red-200 text-red-700 text-sm rounded">
+        <div className="mb-4 px-3.5 py-2.5 bg-red-50 border border-red-200 text-red-700 text-xs font-medium rounded-lg">
           {error}
         </div>
       )}
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Product</label>
+          <label className={labelClass}>Product</label>
           <select
             required
             value={prodcode}
             onChange={e => handleProductChange(e.target.value)}
-            className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className={inputClass}
           >
-            <option value=""> Select product </option>
+            <option value="">Select product</option>
             {products.map(p => (
-              <option key={p.prodcode} value={p.prodcode}>{p.prodcode}  {p.description}</option>
+              <option key={p.prodcode} value={p.prodcode}>{p.prodcode} - {p.description}</option>
             ))}
           </select>
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Unit Price (auto-filled)</label>
+          <label className={labelClass}>Unit Price (auto-filled)</label>
           <input
             readOnly
             value={unitprice ? (isNaN(unitprice) ? unitprice : `$${Number(unitprice).toFixed(2)}`) : ''}
-            className="w-full border border-gray-200 bg-gray-50 rounded-lg px-3 py-2 text-sm text-gray-500"
+            placeholder="Select a product above"
+            className={readonlyClass}
           />
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Quantity</label>
+          <label className={labelClass}>Quantity</label>
           <input
             type="number"
             required
@@ -82,20 +87,27 @@ export default function AddLineItemModal({ transno, onClose, onSuccess }) {
             step="0.01"
             value={quantity}
             onChange={e => setQuantity(e.target.value)}
-            className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
             placeholder="e.g. 5"
+            className={inputClass}
           />
         </div>
         <div className="flex justify-end gap-3 pt-2">
-          <button type="button" onClick={onClose} className="px-4 py-2 text-sm text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50">
+          <button
+            type="button"
+            onClick={onClose}
+            className="px-4 py-2 text-sm font-medium text-slate-600 border border-slate-200 rounded-lg hover:bg-slate-50 transition-all duration-150"
+          >
             Cancel
           </button>
           <button
             type="submit"
             disabled={submitting}
-            className="px-4 py-2 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
+            className="px-4 py-2 text-sm font-semibold text-white rounded-lg disabled:opacity-50 transition-all duration-150"
+            style={{ backgroundColor: '#10b981' }}
+            onMouseEnter={e => { if (!submitting) e.currentTarget.style.backgroundColor = '#059669' }}
+            onMouseLeave={e => { if (!submitting) e.currentTarget.style.backgroundColor = '#10b981' }}
           >
-            {submitting ? 'Saving' : 'Add Line Item'}
+            {submitting ? 'Saving...' : 'Add Line Item'}
           </button>
         </div>
       </form>

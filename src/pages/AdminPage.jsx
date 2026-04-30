@@ -144,7 +144,7 @@ export default function AdminPage() {
                             onMouseEnter={e => { if (!e.currentTarget.disabled) e.currentTarget.style.backgroundColor = 'rgba(16,185,129,0.15)' }}
                             onMouseLeave={e => e.currentTarget.style.backgroundColor = 'rgba(16,185,129,0.08)'}
                           >
-                            {actioning === u.userid ? '' : 'Activate'}
+                            {actioning === u.userid ? '...' : 'Activate'}
                           </button>
                           <button
                             onClick={() => handleAction(u.userid, 'deactivate')}
@@ -154,7 +154,7 @@ export default function AdminPage() {
                             onMouseEnter={e => { if (!e.currentTarget.disabled) e.currentTarget.style.backgroundColor = '#fee2e2' }}
                             onMouseLeave={e => e.currentTarget.style.backgroundColor = '#fef2f2'}
                           >
-                            {actioning === u.userid ? '' : 'Deactivate'}
+                            {actioning === u.userid ? '...' : 'Deactivate'}
                           </button>
                         </div>
                       )}

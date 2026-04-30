@@ -4,6 +4,9 @@ import Modal from './Modal'
 import { createSale } from '../../services/salesService'
 import { getCustomers, getEmployees } from '../../services/lookupService'
 
+const labelClass = 'block text-xs font-semibold text-slate-600 mb-1.5 tracking-wide'
+const inputClass = 'w-full border border-slate-200 rounded-lg px-3.5 py-2.5 text-sm text-slate-900 outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all duration-150'
+
 export default function AddSaleModal({ onClose, onSuccess }) {
   const [salesdate, setSalesdate] = useState(new Date().toISOString().slice(0, 10))
   const [custno, setCustno] = useState('')
@@ -36,59 +39,66 @@ export default function AddSaleModal({ onClose, onSuccess }) {
   return (
     <Modal title="Add Transaction" onClose={onClose}>
       {error && (
-        <div className="mb-4 p-3 bg-red-50 border border-red-200 text-red-700 text-sm rounded">
+        <div className="mb-4 px-3.5 py-2.5 bg-red-50 border border-red-200 text-red-700 text-xs font-medium rounded-lg">
           {error}
         </div>
       )}
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Sales Date</label>
+          <label className={labelClass}>Sales Date</label>
           <input
             type="date"
             required
             value={salesdate}
             onChange={e => setSalesdate(e.target.value)}
-            className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className={inputClass}
           />
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Customer</label>
+          <label className={labelClass}>Customer</label>
           <select
             required
             value={custno}
             onChange={e => setCustno(e.target.value)}
-            className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className={inputClass}
           >
-            <option value=""> Select customer </option>
+            <option value="">Select customer</option>
             {customers.map(c => (
               <option key={c.custno} value={c.custno}>{c.custname}</option>
             ))}
           </select>
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Sales Agent</label>
+          <label className={labelClass}>Sales Agent</label>
           <select
             required
             value={empno}
             onChange={e => setEmpno(e.target.value)}
-            className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className={inputClass}
           >
-            <option value=""> Select employee </option>
+            <option value="">Select employee</option>
             {employees.map(e => (
               <option key={e.empno} value={e.empno}>{e.lastname}, {e.firstname}</option>
             ))}
           </select>
         </div>
         <div className="flex justify-end gap-3 pt-2">
-          <button type="button" onClick={onClose} className="px-4 py-2 text-sm text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50">
+          <button
+            type="button"
+            onClick={onClose}
+            className="px-4 py-2 text-sm font-medium text-slate-600 border border-slate-200 rounded-lg hover:bg-slate-50 transition-all duration-150"
+          >
             Cancel
           </button>
           <button
             type="submit"
             disabled={submitting}
-            className="px-4 py-2 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
+            className="px-4 py-2 text-sm font-semibold text-white rounded-lg disabled:opacity-50 transition-all duration-150"
+            style={{ backgroundColor: '#10b981' }}
+            onMouseEnter={e => { if (!submitting) e.currentTarget.style.backgroundColor = '#059669' }}
+            onMouseLeave={e => { if (!submitting) e.currentTarget.style.backgroundColor = '#10b981' }}
           >
-            {submitting ? 'Saving' : 'Add Transaction'}
+            {submitting ? 'Saving...' : 'Add Transaction'}
           </button>
         </div>
       </form>
