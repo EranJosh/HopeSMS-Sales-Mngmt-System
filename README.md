@@ -1,9 +1,36 @@
 # HopeSMS — Sales Management System
 
+![React](https://img.shields.io/badge/React-18-61DAFB?logo=react&logoColor=white)
+![Vite](https://img.shields.io/badge/Vite-5-646CFF?logo=vite&logoColor=white)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-v3-06B6D4?logo=tailwindcss&logoColor=white)
+![Supabase](https://img.shields.io/badge/Supabase-PostgreSQL-3ECF8E?logo=supabase&logoColor=white)
+![Vercel](https://img.shields.io/badge/Vercel-Deployed-000000?logo=vercel&logoColor=white)
+![License](https://img.shields.io/badge/License-MIT-yellow.svg)
+[![Live](https://img.shields.io/badge/Live-hope--sales.vercel.app-brightgreen)](https://hope-sales.vercel.app)
+
 **Hope, Inc. | New Era University — BS Computer Science**  
 Software Engineering 2 | Section 3BSCS-1 | Academic Year 2025–2026
 
 **Live:** https://hope-sales.vercel.app
+
+---
+
+## Table of Contents
+
+- [Course Details](#course-details)
+- [Team](#team)
+- [Project Description](#project-description)
+- [Tech Stack](#tech-stack)
+- [Database Schema](#database-schema)
+- [Setup Instructions](#setup-instructions)
+- [User Roles](#user-roles)
+- [Project Structure](#project-structure)
+- [Screenshots](#screenshots)
+- [Branching Strategy](#branching-strategy)
+- [Contributing](#contributing)
+- [Available Scripts](#available-scripts)
+- [Documentation](#documentation)
+- [Important Notes on Supabase Column Naming](#important-notes-on-supabase-column-naming)
 
 ---
 
@@ -19,6 +46,8 @@ Software Engineering 2 | Section 3BSCS-1 | Academic Year 2025–2026
 ---
 
 ## Team
+
+**Group: Low Cortisol Duo**
 
 | Member | Roles |
 |--------|-------|
@@ -203,28 +232,58 @@ src/
 
 ---
 
+## Screenshots
+
+> Screenshots coming soon — visit the live app at https://hope-sales.vercel.app
+
+---
+
 ## Branching Strategy
 
 | Branch | Purpose |
 |---|---|
 | `main` | Production — protected, PR only, no direct pushes |
 | `dev` | Integration — protected, PR only |
-| `feature/*` | Feature work — branch from `dev`, PR back to `dev` |
+| `feat/*` | Feature work — branch from `dev`, PR back to `dev` |
 | `db/*` | Database migrations — branch from `dev`, PR back to `dev` |
 | `fix/*` | Bug fixes — branch from `dev`, PR back to `dev` |
 | `test/*` | Tests and QA — branch from `dev`, PR back to `dev` |
 | `docs/*` | Documentation — branch from `dev`, PR back to `dev` |
+| `chore/*` | Maintenance tasks — branch from `dev`, PR back to `dev` |
 
-**Flow:** `feature/xxx` → PR (reviewed by 1+ teammate) → `dev` → release PR → `main`
+**Flow:** `feat/xxx` → PR (reviewed by 1+ teammate) → `dev` → release PR → `main`
 
 ---
 
-## PR Rules
+## Contributing
 
-- Never merge directly to `main` or `dev` — always use a PR
-- Every PR must be reviewed by at least one teammate before merging
-- Draft or unmerged PRs do not count toward sprint deliverables
-- Commit message prefixes: `feat:`, `fix:`, `chore:`, `test:`, `docs:`, `db:`
+All contributions go through pull requests — no direct commits to `main` or `dev`.
+
+### Workflow
+
+1. **Branch from `dev`** using the correct prefix for the type of work:
+   - `feat/` — new features
+   - `fix/` — bug fixes
+   - `db/` — database migrations or schema changes
+   - `test/` — test cases or QA
+   - `docs/` — documentation only
+   - `chore/` — maintenance, dependency updates, tooling
+
+2. **Commit with a prefix** that matches the branch type:
+   ```
+   feat: add price auto-fill to Add Line Item modal
+   fix: correct cascade soft-delete trigger on salesDetail
+   db: add RLS policy for lookup tables
+   test: 39-case rights matrix execution
+   docs: update user manual with admin screenshots
+   chore: clean up stale remote branches
+   ```
+
+3. **Open a PR into `dev`** with a clear title and description of what changed and why.
+
+4. **Get at least one teammate review** before merging. Draft PRs and unreviewed merges do not count as sprint deliverables.
+
+5. **Release to `main`** only via a sprint release PR from `dev` after the sprint is complete and all PRs are merged.
 
 ---
 
