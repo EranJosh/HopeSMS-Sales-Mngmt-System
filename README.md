@@ -15,8 +15,30 @@ Software Engineering 2 | Section 3BSCS-1 | Academic Year 2025–2026
 
 ---
 
+## 🎯 Project Presentation
+
+> 📊 **[Download 12-Slide Presentation](docs/HopeSMS_Presentation.pptx)** — Full defense deck covering architecture, rights matrix, CRUD demo, cascade soft-delete, 4 reports, and lessons learned.
+
+| Slide | Topic |
+|-------|-------|
+| 1 | Title — Low Cortisol Duo, course details, live URL |
+| 2 | Project Overview — 3 user types, soft-delete rule |
+| 3 | 6-Table Database Architecture — CRUD vs Lookup |
+| 4 | User Types & Rights Matrix — 13 rights |
+| 5 | Authentication Flow — email + Google OAuth |
+| 6 | Sales CRUD with Lookup Integration |
+| 7 | Price Autofill & Read-Only Lookup Pages |
+| 8 | Cascade Soft-Delete & Recovery |
+| 9 | 4 Sales Reports with Bar Charts |
+| 10 | Admin Module & SUPERADMIN Protection |
+| 11 | Tech Stack & Architecture |
+| 12 | Lessons Learned |
+
+---
+
 ## Table of Contents
 
+- [Project Presentation](#-project-presentation)
 - [Course Details](#course-details)
 - [Team](#team)
 - [Project Description](#project-description)
@@ -298,15 +320,16 @@ All contributions go through pull requests — no direct commits to `main` or `d
 
 ---
 
-## Documentation
+## 📁 Documentation
 
-| File | Description |
-|------|-------------|
-| [docs/ERD.md](docs/ERD.md) | Text-based entity relationship diagram |
-| [docs/sprint-log.md](docs/sprint-log.md) | Sprint 1–3 task log, blockers, and resolutions |
-| [docs/rights-test-matrix.md](docs/rights-test-matrix.md) | 39-case test matrix (3 user types × 13 rights) |
-| [docs/user-manual.md](docs/user-manual.md) | Step-by-step guide for all user roles |
-| [db/README.md](db/README.md) | Migration execution order and SUPERADMIN setup |
+| Document | Description | Link |
+|----------|-------------|------|
+| 📊 **12-Slide Presentation** | Full defense deck — architecture, rights matrix, CRUD demo, cascade, reports, lessons learned | [Download](docs/HopeSMS_Presentation.pptx) |
+| 📖 **User Manual** | Step-by-step guide for all 3 user types — registration, login, transactions, reports, admin | [View](docs/user-manual.md) |
+| 🗂️ **ERD Diagram** | Entity-relationship diagram for all 6 HopeDB tables with PKs, FKs, and relationships | [View](docs/ERD.md) |
+| ✅ **Rights Test Matrix** | 39-case test matrix — 3 user types × 13 rights — all pass/fail results | [View](docs/rights-test-matrix.md) |
+| 📝 **Sprint Log** | Full 3-sprint development log with tasks, blockers, resolutions, and completion status | [View](docs/sprint-log.md) |
+| 🗄️ **DB Migrations** | All 9 SQL migration files — tables, RLS, triggers, views, grants — with execution order | [View](db/migrations/) |
 
 ---
 
