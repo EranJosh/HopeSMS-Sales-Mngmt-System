@@ -17,22 +17,30 @@ Software Engineering 2 | Section 3BSCS-1 | Academic Year 2025–2026
 
 ## 🎯 Project Presentation
 
-> 📊 **[Download 12-Slide Presentation](docs/HopeSMS_Presentation.pptx)** — Full defense deck covering architecture, rights matrix, CRUD demo, cascade soft-delete, 4 reports, and lessons learned.
+> 📊 **[Download Full Presentation (.pptx)](docs/HopeSMS_Presentation.pptx)**
 
-| Slide | Topic |
-|-------|-------|
-| 1 | Title — Low Cortisol Duo, course details, live URL |
-| 2 | Project Overview — 3 user types, soft-delete rule |
-| 3 | 6-Table Database Architecture — CRUD vs Lookup |
-| 4 | User Types & Rights Matrix — 13 rights |
-| 5 | Authentication Flow — email + Google OAuth |
-| 6 | Sales CRUD with Lookup Integration |
-| 7 | Price Autofill & Read-Only Lookup Pages |
-| 8 | Cascade Soft-Delete & Recovery |
-| 9 | 4 Sales Reports with Bar Charts |
-| 10 | Admin Module & SUPERADMIN Protection |
-| 11 | Tech Stack & Architecture |
-| 12 | Lessons Learned |
+<table>
+  <tr>
+    <td><img src="docs/slides/slide-01.jpg" width="100%"/><br/><sub>1 — Title</sub></td>
+    <td><img src="docs/slides/slide-02.jpg" width="100%"/><br/><sub>2 — Overview</sub></td>
+    <td><img src="docs/slides/slide-03.jpg" width="100%"/><br/><sub>3 — Database</sub></td>
+  </tr>
+  <tr>
+    <td><img src="docs/slides/slide-04.jpg" width="100%"/><br/><sub>4 — Rights Matrix</sub></td>
+    <td><img src="docs/slides/slide-05.jpg" width="100%"/><br/><sub>5 — Auth Flow</sub></td>
+    <td><img src="docs/slides/slide-06.jpg" width="100%"/><br/><sub>6 — Sales CRUD</sub></td>
+  </tr>
+  <tr>
+    <td><img src="docs/slides/slide-07.jpg" width="100%"/><br/><sub>7 — Price Autofill</sub></td>
+    <td><img src="docs/slides/slide-08.jpg" width="100%"/><br/><sub>8 — Cascade</sub></td>
+    <td><img src="docs/slides/slide-09.jpg" width="100%"/><br/><sub>9 — Reports</sub></td>
+  </tr>
+  <tr>
+    <td><img src="docs/slides/slide-10.jpg" width="100%"/><br/><sub>10 — Admin</sub></td>
+    <td><img src="docs/slides/slide-11.jpg" width="100%"/><br/><sub>11 — Tech Stack</sub></td>
+    <td><img src="docs/slides/slide-12.jpg" width="100%"/><br/><sub>12 — Lessons</sub></td>
+  </tr>
+</table>
 
 ---
 
