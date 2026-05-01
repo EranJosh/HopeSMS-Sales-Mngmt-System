@@ -1,16 +1,14 @@
-# Supabase database backup verified — all 6 tables exported via Supabase Dashboard > Database > Backups
-# Sprint 1 Log — HopeSMS Setup, Auth, DB Schema
 # HopeSMS — Sprint Log
 
-**Project:** Hope, Inc. Sales Management System  
-**Course:** Software Engineering 2 — New Era University, CCS  
-**Team Size:** 5 members | **Total Sprints:** 3 (6 weeks)
+**Project:** Hope, Inc. Sales Management System
+**Course:** Software Engineering 2 — New Era University, CCS
+**Team Size:** 2 members | **Total Sprints:** 3 (6 weeks)
 
 ---
 
 ## Sprint 1 — Weeks 1 & 2
-**Theme:** Project setup, full SMS database, Email + Google OAuth, login guard  
-**Dates:** 2026-03-30 → 2026-04-12  
+**Theme:** Project setup, full SMS database, Email + Google OAuth, login guard
+**Dates:** 2026-03-30 → 2026-04-12
 **Status:** COMPLETE
 
 ### Tasks Completed
@@ -45,7 +43,7 @@
 |---------|-----------|
 | `npm create vite` cancelled in non-empty directory | Scaffolded into temp folder, copied files across |
 | `userId` vs `userid` column casing mismatch (PostgreSQL lowercases unquoted identifiers) | Fixed all Supabase queries to use lowercase column names |
-| `supabase.auth.signInWithPassword` hanging — "Signing in…" stuck forever | Root cause: Supabase JS v2 awaits async `onAuthStateChange` subscribers. Fixed by making the callback synchronous and firing async work via `.catch().finally()` without blocking the subscriber loop |
+| `supabase.auth.signInWithPassword` hanging — "Signing in..." stuck forever | Root cause: Supabase JS v2 awaits async `onAuthStateChange` subscribers. Fixed by making the callback synchronous and firing async work via `.catch().finally()` without blocking the subscriber loop |
 
 ### Next Sprint Goals
 - Full CRUD on `sales` and `salesDetail` with rights gating
@@ -57,8 +55,8 @@
 ---
 
 ## Sprint 2 — Weeks 3 & 4
-**Theme:** Full sales and salesDetail CRUD, rights gating, lookup integration, soft-delete, reports  
-**Dates:** 2026-04-13 → 2026-04-26  
+**Theme:** Full sales and salesDetail CRUD, rights gating, lookup integration, soft-delete, reports
+**Dates:** 2026-04-13 → 2026-04-26
 **Status:** COMPLETE
 
 ### Tasks Completed
@@ -118,9 +116,9 @@
 ---
 
 ## Sprint 3 — Weeks 5 & 6
-**Theme:** Reports, Admin, final testing, deployment, documentation  
-**Dates:** 2026-04-27 → 2026-05-10  
-**Status:** IN PROGRESS
+**Theme:** Reports, Admin, final testing, deployment, documentation
+**Dates:** 2026-04-27 → 2026-05-10
+**Status:** COMPLETE
 
 ### Tasks Completed
 
@@ -132,13 +130,23 @@
 | 4 | Rights test matrix committed to `docs/rights-test-matrix.md` | M5 | docs/sprint3-final |
 | 5 | User manual committed to `docs/user-manual.md` | M5 | docs/sprint3-final |
 | 6 | README updated with full setup and Supabase instructions | M5 | docs/sprint3-final |
+| 7 | Deployed to Vercel — live at https://hope-sales.vercel.app | M1 | chore/production-deploy |
+| 8 | Full 39-case rights test matrix executed and verified in production | M5 | test/sprint3-e2e-production |
+| 9 | Recharts bar charts added to all 4 report tabs; monthly trend has date range filter | M2 | fix/final-polish |
+| 10 | All `console.log` statements removed from `AuthContext.jsx` and `UserRightsContext.jsx` (18 removed) | M1 | fix/final-polish |
+| 11 | Vitest test suite fixed — 4/4 stub tests passing with 0 errors | M5 | fix/final-polish |
+| 12 | User manual fully rewritten — complete professional guide for all 3 user types | M5 | fix/final-polish |
+| 13 | Sprint Deliverables document reviewed and finalised | M5 | fix/final-polish |
 
-### Remaining Tasks
+### Sprint 3 Deliverables Summary
 
-| # | Task | Owner | Target |
-|---|------|-------|--------|
-| 1 | Full 39-case rights test execution | M5 | Week 6 |
-| 2 | Deployment to Vercel (https://hope-sales.vercel.app) | M1 | Week 6 |
-| 3 | Final presentation preparation | All | Week 6 |
-< ! - -   S p r i n t   1   l o g   r e v i e w e d   a n d   v e r i f i e d   b y   M i c o l e   K u r t   G o n d a   - - >  
- 
+| Deliverable | Status |
+|------------|--------|
+| Reports page with 4 tabs + recharts visualisations | Done |
+| Admin page with SUPERADMIN RLS protection | Done |
+| Deployment to Vercel (https://hope-sales.vercel.app) | Done |
+| Final 39-case rights test matrix — all cases PASS | Done |
+| User manual — complete guide for all user roles | Done |
+| Vitest suite — 4/4 tests passing, 0 errors | Done |
+| All console.log statements removed from production code | Done |
+| README finalised with badges, ToC, team section, contributing guide | Done |

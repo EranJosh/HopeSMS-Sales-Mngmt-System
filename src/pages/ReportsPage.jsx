@@ -1,21 +1,54 @@
 // ReportsPage UI -- SalesByEmployee (bar chart), SalesByCustomer (table+highlight), TopProducts (ranked list/chart), MonthlyTrend (bar chart + date filter) -- Micole Kurt Gonda
 import { useEffect, useState, useMemo } from 'react'
 import {
+  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip,
+  ResponsiveContainer, Cell,
+} from 'recharts'
+import {
   getSalesByEmployee,
   getSalesByCustomer,
   getTopProducts,
   getMonthlySalesTrend,
 } from '../services/reportsService'
 
+const EMERALD = '#10b981'
+const CHARCOAL = '#334155'
+const GRID = '#f1f5f9'
+
 const fmt = n => n != null
   ? new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(n)
   : '--'
+
+const shortFmt = v => {
+  const n = Number(v)
+  if (n >= 1_000_000) return `$${(n / 1_000_000).toFixed(1)}M`
+  if (n >= 1_000) return `$${(n / 1_000).toFixed(0)}k`
+  return `$${n}`
+}
 
 const CARD_STYLE = {
   backgroundColor: '#ffffff',
   border: '1px solid #e2e8f0',
   borderRadius: '12px',
   boxShadow: '0 1px 3px rgba(0,0,0,0.07), 0 4px 12px rgba(0,0,0,0.04)',
+}
+
+function ChartCard({ children }) {
+  return (
+    <div style={{ ...CARD_STYLE, padding: '20px 16px 8px', marginBottom: 20 }}>
+      {children}
+    </div>
+  )
+}
+
+function ChartTooltip({ active, payload, label }) {
+  if (!active || !payload?.length) return null
+  return (
+    <div style={{ background: '#1e293b', borderRadius: 8, padding: '8px 12px', boxShadow: '0 4px 12px rgba(0,0,0,0.25)' }}>
+      <p style={{ color: '#94a3b8', fontSize: 11, marginBottom: 2 }}>{label}</p>
+      <p style={{ color: '#10b981', fontSize: 13, fontWeight: 700 }}>{fmt(payload[0].value)}</p>
+    </div>
+  )
 }
 
 function SortIcon({ col, sortKey, sortDir }) {
@@ -121,6 +154,8 @@ export default function ReportsPage() {
   const [monthly, setMonthly] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
+  const [fromMonth, setFromMonth] = useState('')
+  const [toMonth, setToMonth] = useState('')
 
   useEffect(() => {
     setLoading(true)
@@ -139,6 +174,42 @@ export default function ReportsPage() {
       .catch(err => setError(err.message))
       .finally(() => setLoading(false))
   }, [])
+
+  // --- chart data (memoised) ---
+  const empChartData = useMemo(() =>
+    [...byEmp]
+      .sort((a, b) => Number(b.totalrevenue) - Number(a.totalrevenue))
+      .slice(0, 10)
+      .map(r => ({ name: r.empname, revenue: Number(r.totalrevenue) }))
+  , [byEmp])
+
+  const custChartData = useMemo(() =>
+    [...byCust]
+      .sort((a, b) => Number(b.totalrevenue) - Number(a.totalrevenue))
+      .slice(0, 10)
+      .map(r => ({ name: r.custname, revenue: Number(r.totalrevenue) }))
+  , [byCust])
+
+  const prodChartData = useMemo(() =>
+    [...topProd]
+      .sort((a, b) => Number(b.totalrevenue) - Number(a.totalrevenue))
+      .slice(0, 10)
+      .map(r => ({ name: r.description, revenue: Number(r.totalrevenue) }))
+  , [topProd])
+
+  const filteredMonthly = useMemo(() => {
+    return monthly
+      .filter(r => {
+        if (fromMonth && r.salemonth < fromMonth) return false
+        if (toMonth && r.salemonth > toMonth) return false
+        return true
+      })
+      .sort((a, b) => a.salemonth.localeCompare(b.salemonth))
+  }, [monthly, fromMonth, toMonth])
+
+  const monthChartData = useMemo(() =>
+    filteredMonthly.map(r => ({ name: r.salemonth, revenue: Number(r.totalrevenue) }))
+  , [filteredMonthly])
 
   const tabs = [
     { key: 'employee', label: 'By Employee' },
@@ -209,10 +280,167 @@ export default function ReportsPage() {
         <div className="px-4 py-3 rounded-xl text-red-700 text-sm font-medium" style={{ backgroundColor: '#fef2f2', border: '1px solid #fecaca' }}>{error}</div>
       ) : (
         <>
-          {tab === 'employee' && <SortableTable cols={empCols} data={byEmp} defaultSort="totalrevenue" />}
-          {tab === 'customer' && <SortableTable cols={custCols} data={byCust} defaultSort="totalrevenue" />}
-          {tab === 'products' && <SortableTable cols={prodCols} data={topProd} defaultSort="totalrevenue" />}
-          {tab === 'monthly' && <SortableTable cols={monthCols} data={monthly} defaultSort="salemonth" />}
+          {/* ── By Employee ── */}
+          {tab === 'employee' && (
+            <>
+              <ChartCard>
+                <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3">Revenue by Employee — Top 10</p>
+                <ResponsiveContainer width="100%" height={260}>
+                  <BarChart data={empChartData} margin={{ top: 4, right: 16, left: 8, bottom: 56 }}>
+                    <CartesianGrid strokeDasharray="3 3" stroke={GRID} vertical={false} />
+                    <XAxis
+                      dataKey="name"
+                      tick={{ fill: CHARCOAL, fontSize: 11 }}
+                      angle={-35}
+                      textAnchor="end"
+                      interval={0}
+                      tickLine={false}
+                      axisLine={false}
+                    />
+                    <YAxis
+                      tickFormatter={shortFmt}
+                      tick={{ fill: '#94a3b8', fontSize: 11 }}
+                      tickLine={false}
+                      axisLine={false}
+                      width={56}
+                    />
+                    <Tooltip content={<ChartTooltip />} cursor={{ fill: '#f0fdf4' }} />
+                    <Bar dataKey="revenue" fill={EMERALD} radius={[4, 4, 0, 0]} maxBarSize={48} />
+                  </BarChart>
+                </ResponsiveContainer>
+              </ChartCard>
+              <SortableTable cols={empCols} data={byEmp} defaultSort="totalrevenue" />
+            </>
+          )}
+
+          {/* ── By Customer ── */}
+          {tab === 'customer' && (
+            <>
+              <ChartCard>
+                <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3">Revenue by Customer — Top 10</p>
+                <ResponsiveContainer width="100%" height={260}>
+                  <BarChart data={custChartData} margin={{ top: 4, right: 16, left: 8, bottom: 56 }}>
+                    <CartesianGrid strokeDasharray="3 3" stroke={GRID} vertical={false} />
+                    <XAxis
+                      dataKey="name"
+                      tick={{ fill: CHARCOAL, fontSize: 11 }}
+                      angle={-35}
+                      textAnchor="end"
+                      interval={0}
+                      tickLine={false}
+                      axisLine={false}
+                    />
+                    <YAxis
+                      tickFormatter={shortFmt}
+                      tick={{ fill: '#94a3b8', fontSize: 11 }}
+                      tickLine={false}
+                      axisLine={false}
+                      width={56}
+                    />
+                    <Tooltip content={<ChartTooltip />} cursor={{ fill: '#f0fdf4' }} />
+                    <Bar dataKey="revenue" radius={[4, 4, 0, 0]} maxBarSize={48}>
+                      {custChartData.map((_, i) => (
+                        <Cell key={i} fill={i === 0 ? EMERALD : CHARCOAL} />
+                      ))}
+                    </Bar>
+                  </BarChart>
+                </ResponsiveContainer>
+              </ChartCard>
+              <SortableTable cols={custCols} data={byCust} defaultSort="totalrevenue" />
+            </>
+          )}
+
+          {/* ── Top Products ── */}
+          {tab === 'products' && (
+            <>
+              <ChartCard>
+                <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3">Top 10 Products by Revenue</p>
+                <ResponsiveContainer width="100%" height={320}>
+                  <BarChart
+                    layout="vertical"
+                    data={prodChartData}
+                    margin={{ top: 4, right: 24, left: 8, bottom: 4 }}
+                  >
+                    <CartesianGrid strokeDasharray="3 3" stroke={GRID} horizontal={false} />
+                    <XAxis
+                      type="number"
+                      tickFormatter={shortFmt}
+                      tick={{ fill: '#94a3b8', fontSize: 11 }}
+                      tickLine={false}
+                      axisLine={false}
+                    />
+                    <YAxis
+                      type="category"
+                      dataKey="name"
+                      width={180}
+                      tick={{ fill: CHARCOAL, fontSize: 11 }}
+                      tickLine={false}
+                      axisLine={false}
+                    />
+                    <Tooltip content={<ChartTooltip />} cursor={{ fill: '#f0fdf4' }} />
+                    <Bar dataKey="revenue" fill={EMERALD} radius={[0, 4, 4, 0]} maxBarSize={22} />
+                  </BarChart>
+                </ResponsiveContainer>
+              </ChartCard>
+              <SortableTable cols={prodCols} data={topProd} defaultSort="totalrevenue" />
+            </>
+          )}
+
+          {/* ── Monthly Trend ── */}
+          {tab === 'monthly' && (
+            <>
+              <ChartCard>
+                <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
+                  <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">Monthly Revenue Trend</p>
+                  <div className="flex items-center gap-2">
+                    <label className="text-xs text-slate-500 font-medium">From</label>
+                    <input
+                      type="month"
+                      value={fromMonth}
+                      onChange={e => setFromMonth(e.target.value)}
+                      className="text-xs px-2 py-1 rounded-lg border border-slate-200 text-slate-700 focus:outline-none focus:ring-2 focus:ring-emerald-400"
+                    />
+                    <label className="text-xs text-slate-500 font-medium">To</label>
+                    <input
+                      type="month"
+                      value={toMonth}
+                      onChange={e => setToMonth(e.target.value)}
+                      className="text-xs px-2 py-1 rounded-lg border border-slate-200 text-slate-700 focus:outline-none focus:ring-2 focus:ring-emerald-400"
+                    />
+                    {(fromMonth || toMonth) && (
+                      <button
+                        onClick={() => { setFromMonth(''); setToMonth('') }}
+                        className="text-xs text-slate-400 hover:text-slate-600 underline"
+                      >
+                        Clear
+                      </button>
+                    )}
+                  </div>
+                </div>
+                <ResponsiveContainer width="100%" height={240}>
+                  <BarChart data={monthChartData} margin={{ top: 4, right: 16, left: 8, bottom: 4 }}>
+                    <CartesianGrid strokeDasharray="3 3" stroke={GRID} vertical={false} />
+                    <XAxis
+                      dataKey="name"
+                      tick={{ fill: CHARCOAL, fontSize: 11 }}
+                      tickLine={false}
+                      axisLine={false}
+                    />
+                    <YAxis
+                      tickFormatter={shortFmt}
+                      tick={{ fill: '#94a3b8', fontSize: 11 }}
+                      tickLine={false}
+                      axisLine={false}
+                      width={56}
+                    />
+                    <Tooltip content={<ChartTooltip />} cursor={{ fill: '#f0fdf4' }} />
+                    <Bar dataKey="revenue" fill={CHARCOAL} radius={[4, 4, 0, 0]} maxBarSize={36} />
+                  </BarChart>
+                </ResponsiveContainer>
+              </ChartCard>
+              <SortableTable cols={monthCols} data={filteredMonthly} defaultSort="salemonth" />
+            </>
+          )}
         </>
       )}
     </div>
