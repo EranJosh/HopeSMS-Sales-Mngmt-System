@@ -1,0 +1,107 @@
+// AddSaleModal  salesDate + custNo dropdown (customer names) + empNo dropdown (employee names)  SALES_ADD gated  Micole Kurt Gonda
+import { useEffect, useState } from 'react'
+import Modal from './Modal'
+import { createSale } from '../../services/salesService'
+import { getCustomers, getEmployees } from '../../services/lookupService'
+
+const labelClass = 'block text-xs font-semibold text-slate-600 mb-1.5 tracking-wide'
+const inputClass = 'w-full border border-slate-200 rounded-lg px-3.5 py-2.5 text-sm text-slate-900 outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all duration-150'
+
+export default function AddSaleModal({ onClose, onSuccess }) {
+  const [salesdate, setSalesdate] = useState(new Date().toISOString().slice(0, 10))
+  const [custno, setCustno] = useState('')
+  const [empno, setEmpno] = useState('')
+  const [customers, setCustomers] = useState([])
+  const [employees, setEmployees] = useState([])
+  const [submitting, setSubmitting] = useState(false)
+  const [error, setError] = useState('')
+
+  useEffect(() => {
+    getCustomers().then(setCustomers).catch(() => {})
+    getEmployees().then(setEmployees).catch(() => {})
+  }, [])
+
+  async function handleSubmit(e) {
+    e.preventDefault()
+    setError('')
+    setSubmitting(true)
+    try {
+      await createSale({ salesdate, custno, empno })
+      onSuccess()
+      onClose()
+    } catch (err) {
+      setError(err.message)
+    } finally {
+      setSubmitting(false)
+    }
+  }
+
+  return (
+    <Modal title="Add Transaction" onClose={onClose}>
+      {error && (
+        <div className="mb-4 px-3.5 py-2.5 bg-red-50 border border-red-200 text-red-700 text-xs font-medium rounded-lg">
+          {error}
+        </div>
+      )}
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <div>
+          <label className={labelClass}>Sales Date</label>
+          <input
+            type="date"
+            required
+            value={salesdate}
+            onChange={e => setSalesdate(e.target.value)}
+            className={inputClass}
+          />
+        </div>
+        <div>
+          <label className={labelClass}>Customer</label>
+          <select
+            required
+            value={custno}
+            onChange={e => setCustno(e.target.value)}
+            className={inputClass}
+          >
+            <option value="">Select customer</option>
+            {customers.map(c => (
+              <option key={c.custno} value={c.custno}>{c.custname}</option>
+            ))}
+          </select>
+        </div>
+        <div>
+          <label className={labelClass}>Sales Agent</label>
+          <select
+            required
+            value={empno}
+            onChange={e => setEmpno(e.target.value)}
+            className={inputClass}
+          >
+            <option value="">Select employee</option>
+            {employees.map(e => (
+              <option key={e.empno} value={e.empno}>{e.lastname}, {e.firstname}</option>
+            ))}
+          </select>
+        </div>
+        <div className="flex justify-end gap-3 pt-2">
+          <button
+            type="button"
+            onClick={onClose}
+            className="px-4 py-2 text-sm font-medium text-slate-600 border border-slate-200 rounded-lg hover:bg-slate-50 transition-all duration-150"
+          >
+            Cancel
+          </button>
+          <button
+            type="submit"
+            disabled={submitting}
+            className="px-4 py-2 text-sm font-semibold text-white rounded-lg disabled:opacity-50 transition-all duration-150"
+            style={{ backgroundColor: '#10b981' }}
+            onMouseEnter={e => { if (!submitting) e.currentTarget.style.backgroundColor = '#059669' }}
+            onMouseLeave={e => { if (!submitting) e.currentTarget.style.backgroundColor = '#10b981' }}
+          >
+            {submitting ? 'Saving...' : 'Add Transaction'}
+          </button>
+        </div>
+      </form>
+    </Modal>
+  )
+}
