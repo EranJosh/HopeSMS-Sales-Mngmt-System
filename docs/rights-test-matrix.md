@@ -124,3 +124,29 @@ All three user types must see **zero mutation buttons** on:
 3. For each row in the 39-case table above, perform the described action and record PASS or FAIL
 4. For RLS verification, confirm in Supabase Table Editor → Policies that no write policies exist on lookup tables
 5. Replace `—` in the Result column with PASS / FAIL and the test date
+
+---
+
+## Lookup-Only Network Tab Verification
+
+Tested on: https://hope-sales.vercel.app
+Date: 2026-05-01
+
+For each lookup page, browser DevTools Network tab was monitored while logged in as all 3 user types.
+
+| Page | User Type | POST/PATCH/DELETE calls detected | Result |
+|------|-----------|----------------------------------|--------|
+| Customers | SUPERADMIN | None | ✅ PASS |
+| Customers | ADMIN | None | ✅ PASS |
+| Customers | USER | None | ✅ PASS |
+| Employees | SUPERADMIN | None | ✅ PASS |
+| Employees | ADMIN | None | ✅ PASS |
+| Employees | USER | None | ✅ PASS |
+| Products | SUPERADMIN | None | ✅ PASS |
+| Products | ADMIN | None | ✅ PASS |
+| Products | USER | None | ✅ PASS |
+| Price History | SUPERADMIN | None | ✅ PASS |
+| Price History | ADMIN | None | ✅ PASS |
+| Price History | USER | None | ✅ PASS |
+
+**Conclusion:** All 4 lookup pages confirmed mutation-free at network level. Only GET/SELECT requests observed for all user types.
