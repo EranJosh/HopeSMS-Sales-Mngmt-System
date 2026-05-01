@@ -3,7 +3,7 @@
 
 **System:** Hope, Inc. Sales Management System  
 **Version:** Sprint 2 Complete  
-**Access:** `http://localhost:5173` (development) or your deployed URL
+**Access:** `http://localhost:5173` (development) or https://hope-sales.vercel.app (production)
 
 ---
 

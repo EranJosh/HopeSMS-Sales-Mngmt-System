@@ -1,7 +1,29 @@
 # HopeSMS — Sales Management System
 
 **Hope, Inc. | New Era University — BS Computer Science**  
-Software Engineering 2 Capstone | Academic Year 2025–2026
+Software Engineering 2 | Section 3BSCS-1 | Academic Year 2025–2026
+
+**Live:** https://hope-sales.vercel.app
+
+---
+
+## Course Details
+
+| Field | Info |
+|-------|------|
+| Course | Software Engineering 2 |
+| Section | 3BSCS-1 |
+| University | New Era University |
+| Academic Year | 2025–2026 |
+
+---
+
+## Team
+
+| Member | Roles |
+|--------|-------|
+| Eran Josh Reyes | M1 Project Lead \| M3 DB Engineer \| M4 Rights & Auth \| M5 QA/Docs |
+| Micole Kurt Gonda | M2 Frontend Developer \| M5 QA/Docs |
 
 ---
 
@@ -29,7 +51,7 @@ HopeSMS is a full-stack web application that manages sales transactions and line
 | Routing | React Router v6 | Protected routes, nested layouts |
 | Testing | Vitest + React Testing Library | Unit and integration tests |
 | Version Control | Git + GitHub | Source control and collaboration |
-| Deployment | Vercel / Netlify | Free-tier hosted production URL |
+| Deployment | Vercel | Production hosting — https://hope-sales.vercel.app |
 
 ---
 

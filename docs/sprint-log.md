@@ -112,7 +112,7 @@
 - Reports page: 4 sortable tabs (By Employee, By Customer, Top Products, Monthly Trend)
 - Admin page: user activation / deactivation with SUPERADMIN protection
 - Final testing: 39-case rights matrix verification
-- Deployment to Vercel or Netlify
+- Deployment to Vercel (https://hope-sales.vercel.app)
 - Final documentation: user manual, sprint log, rights matrix
 
 ---
@@ -138,7 +138,7 @@
 | # | Task | Owner | Target |
 |---|------|-------|--------|
 | 1 | Full 39-case rights test execution | M5 | Week 6 |
-| 2 | Deployment to Vercel / Netlify | M1 | Week 6 |
+| 2 | Deployment to Vercel (https://hope-sales.vercel.app) | M1 | Week 6 |
 | 3 | Final presentation preparation | All | Week 6 |
 < ! - -   S p r i n t   1   l o g   r e v i e w e d   a n d   v e r i f i e d   b y   M i c o l e   K u r t   G o n d a   - - >  
  
