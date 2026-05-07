@@ -3,9 +3,8 @@ import Modal from './Modal'
 import { addDetailLine } from '../../services/salesDetailService'
 import { getProducts, getCurrentPrice } from '../../services/lookupService'
 
-const labelClass = 'block text-xs font-semibold text-slate-600 mb-1.5 tracking-wide'
-const inputClass = 'w-full border border-slate-200 rounded-lg px-3.5 py-2.5 text-sm text-slate-900 outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all duration-150'
-const readonlyClass = 'w-full border border-slate-200 bg-slate-50 rounded-lg px-3.5 py-2.5 text-sm text-slate-400'
+const labelClass = 'block text-xs font-bold mb-1.5 uppercase'
+const labelStyle = { color: '#1e3a52', letterSpacing: '0.1em', fontFamily: "'Rajdhani', sans-serif" }
 
 export default function AddLineItemModal({ transno, onClose, onSuccess }) {
   const [prodcode, setProdcode] = useState('')
@@ -50,19 +49,14 @@ export default function AddLineItemModal({ transno, onClose, onSuccess }) {
   return (
     <Modal title="Add Line Item" onClose={onClose}>
       {error && (
-        <div className="mb-4 px-3.5 py-2.5 bg-red-50 border border-red-200 text-red-700 text-xs font-medium rounded-lg">
+        <div className="mb-4 px-3.5 py-2.5 rounded-lg text-xs font-medium" style={{ backgroundColor: 'rgba(255,77,106,0.08)', border: '1px solid rgba(255,77,106,0.2)', color: '#ff4d6a' }}>
           {error}
         </div>
       )}
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label className={labelClass}>Product</label>
-          <select
-            required
-            value={prodcode}
-            onChange={e => handleProductChange(e.target.value)}
-            className={inputClass}
-          >
+          <label className={labelClass} style={labelStyle}>Product</label>
+          <select required value={prodcode} onChange={e => handleProductChange(e.target.value)} className="w-full rounded-lg px-3.5 py-2.5 text-sm outline-none transition-colors duration-150">
             <option value="">Select product</option>
             {products.map(p => (
               <option key={p.prodcode} value={p.prodcode}>{p.prodcode} - {p.description}</option>
@@ -70,16 +64,17 @@ export default function AddLineItemModal({ transno, onClose, onSuccess }) {
           </select>
         </div>
         <div>
-          <label className={labelClass}>Unit Price (auto-filled)</label>
+          <label className={labelClass} style={labelStyle}>Unit Price (auto-filled)</label>
           <input
             readOnly
             value={unitprice ? (isNaN(unitprice) ? unitprice : `$${Number(unitprice).toFixed(2)}`) : ''}
             placeholder="Select a product above"
-            className={readonlyClass}
+            className="w-full rounded-lg px-3.5 py-2.5 text-sm"
+            style={{ backgroundColor: '#070f1e', border: '1px solid rgba(0,229,255,0.06)', color: '#4d7a9e' }}
           />
         </div>
         <div>
-          <label className={labelClass}>Quantity</label>
+          <label className={labelClass} style={labelStyle}>Quantity</label>
           <input
             type="number"
             required
@@ -88,24 +83,27 @@ export default function AddLineItemModal({ transno, onClose, onSuccess }) {
             value={quantity}
             onChange={e => setQuantity(e.target.value)}
             placeholder="e.g. 5"
-            className={inputClass}
+            className="w-full rounded-lg px-3.5 py-2.5 text-sm outline-none transition-colors duration-150"
           />
         </div>
         <div className="flex justify-end gap-3 pt-2">
           <button
             type="button"
             onClick={onClose}
-            className="px-4 py-2 text-sm font-medium text-slate-600 border border-slate-200 rounded-lg hover:bg-slate-50 transition-all duration-150"
+            className="px-4 py-2 text-sm font-bold rounded-lg transition-colors duration-150 cursor-pointer"
+            style={{ border: '1px solid rgba(0,229,255,0.12)', color: '#4d7a9e', backgroundColor: 'transparent', fontFamily: "'Rajdhani', sans-serif" }}
+            onMouseEnter={e => { e.currentTarget.style.backgroundColor = 'rgba(0,229,255,0.06)'; e.currentTarget.style.color = '#c8dff5' }}
+            onMouseLeave={e => { e.currentTarget.style.backgroundColor = 'transparent'; e.currentTarget.style.color = '#4d7a9e' }}
           >
             Cancel
           </button>
           <button
             type="submit"
             disabled={submitting}
-            className="px-4 py-2 text-sm font-semibold text-white rounded-lg disabled:opacity-50 transition-all duration-150"
-            style={{ backgroundColor: '#10b981' }}
-            onMouseEnter={e => { if (!submitting) e.currentTarget.style.backgroundColor = '#059669' }}
-            onMouseLeave={e => { if (!submitting) e.currentTarget.style.backgroundColor = '#10b981' }}
+            className="px-4 py-2 text-sm font-bold rounded-lg disabled:opacity-50 transition-colors duration-150 cursor-pointer"
+            style={{ backgroundColor: '#00ff88', color: '#040810', boxShadow: '0 0 14px rgba(0,255,136,0.22)', fontFamily: "'Rajdhani', sans-serif" }}
+            onMouseEnter={e => { if (!submitting) { e.currentTarget.style.backgroundColor = '#00e07a'; e.currentTarget.style.boxShadow = '0 0 20px rgba(0,255,136,0.35)' } }}
+            onMouseLeave={e => { if (!submitting) { e.currentTarget.style.backgroundColor = '#00ff88'; e.currentTarget.style.boxShadow = '0 0 14px rgba(0,255,136,0.22)' } }}
           >
             {submitting ? 'Saving...' : 'Add Line Item'}
           </button>
