@@ -1,4 +1,4 @@
-// SMS routing: /sales, /sales/:transNo, /lookups/*, /reports, /admin, /deleted-items, /auth/callback  all guarded by ProtectedRoute
+// SMS routing: /dashboard, /sales, /sales/:transNo, /lookups/*, /reports, /admin, /deleted-items, /auth/callback  all guarded by ProtectedRoute
 // Error boundary and loading state components applied to all data-fetching pages
 import { Routes, Route, Navigate } from 'react-router-dom'
 import ProtectedRoute from './components/ProtectedRoute'
@@ -8,6 +8,7 @@ import LoginPage from './pages/LoginPage'
 import RegisterPage from './pages/RegisterPage'
 import AuthCallbackPage from './pages/AuthCallbackPage'
 
+import DashboardPage from './pages/DashboardPage'
 import SalesListPage from './pages/SalesListPage'
 import SalesDetailPage from './pages/SalesDetailPage'
 import CustomerLookupPage from './pages/CustomerLookupPage'
@@ -26,10 +27,11 @@ export default function App() {
       <Route path="/register" element={<RegisterPage />} />
       <Route path="/auth/callback" element={<AuthCallbackPage />} />
 
-      {/* Protected routes  wrapped in AppShell layout */}
+      {/* Protected routes wrapped in AppShell layout */}
       <Route element={<ProtectedRoute />}>
         <Route element={<AppShell />}>
-          <Route index element={<Navigate to="/sales" replace />} />
+          <Route index element={<Navigate to="/dashboard" replace />} />
+          <Route path="/dashboard" element={<DashboardPage />} />
           <Route path="/sales" element={<SalesListPage />} />
           <Route path="/sales/:transNo" element={<SalesDetailPage />} />
           <Route path="/lookups/customers" element={<CustomerLookupPage />} />
@@ -43,7 +45,7 @@ export default function App() {
       </Route>
 
       {/* Catch-all */}
-      <Route path="*" element={<Navigate to="/sales" replace />} />
+      <Route path="*" element={<Navigate to="/dashboard" replace />} />
     </Routes>
   )
 }
