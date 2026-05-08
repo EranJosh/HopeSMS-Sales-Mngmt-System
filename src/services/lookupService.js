@@ -65,3 +65,49 @@ export async function getAllPriceHistory() {
   if (error) throw error
   return data || []
 }
+
+export async function getTransactionsByCustomer(custNo) {
+  const { data, error } = await supabase
+    .from('sales_with_lookup')
+    .select('*')
+    .eq('custno', custNo)
+    .order('salesdate', { ascending: false })
+  if (error) throw error
+  return data || []
+}
+
+export async function getTransactionsByEmployee(empNo) {
+  const { data, error } = await supabase
+    .from('sales_with_lookup')
+    .select('*')
+    .eq('empno', empNo)
+    .order('salesdate', { ascending: false })
+  if (error) throw error
+  return data || []
+}
+
+export async function getEmployeeStats(empNo) {
+  // Try the sales_by_employee view first, fall back to computing from transactions
+  try {
+    const { data, error } = await supabase
+      .from('sales_by_employee')
+      .select('*')
+      .eq('empno', empNo)
+      .maybeSingle()
+    if (!error && data) return data
+  } catch {
+    // View may not exist — compute from transactions
+  }
+  // Fallback: compute from sales_with_lookup
+  const { data, error } = await supabase
+    .from('sales_with_lookup')
+    .select('totalamount')
+    .eq('empno', empNo)
+    .eq('record_status', 'ACTIVE')
+  if (error) throw error
+  const rows = data || []
+  return {
+    totaltransactions: rows.length,
+    totalrevenue: rows.reduce((s, r) => s + Number(r.totalamount || 0), 0),
+  }
+}

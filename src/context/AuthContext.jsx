@@ -42,6 +42,7 @@ export default function AuthProvider({ children }) {
       // Spread session.user first (provides .id, .email, auth timestamps, etc.),
       // then explicitly overwrite every app-owned field from public.user so that
       // JWT claims or session.user properties never shadow our DB values.
+      const meta = session.user.user_metadata || {}
       const merged = {
         ...session.user,
         ...userRow,
@@ -54,6 +55,9 @@ export default function AuthProvider({ children }) {
         user_type:     userRow.user_type,
         record_status: userRow.record_status,
         stamp:         userRow.stamp,
+        // Google OAuth profile enrichment
+        displayName:   meta.full_name || meta.name || userRow.username || '',
+        avatarUrl:     meta.avatar_url || null,
       }
 
       setError(null)
@@ -94,7 +98,7 @@ export default function AuthProvider({ children }) {
   }, [])
 
   return (
-    <AuthContext.Provider value={{ currentUser, loading, error, setError }}>
+    <AuthContext.Provider value={{ currentUser, setCurrentUser, loading, error, setError }}>
       {children}
     </AuthContext.Provider>
   )

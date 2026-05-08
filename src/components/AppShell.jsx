@@ -1,9 +1,11 @@
 // Stamp hidden when currentUser.user_type=USER in SalesListPage and SalesDetailPage. Sidebar: Deleted Items + Admin links hidden for USER.
 // AppShell -- Sidebar navigation with icons + top header -- Micole Kurt Gonda
-import { Outlet, NavLink, useLocation } from 'react-router-dom'
+import { useState } from 'react'
+import { Outlet, NavLink, useLocation, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import { useRights } from '../context/UserRightsContext'
 import { supabase } from '../lib/supabaseClient'
+import ChangePasswordModal from './modals/ChangePasswordModal'
 
 const IconReceipt = () => (
   <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
@@ -82,6 +84,28 @@ const IconLogout = () => (
   </svg>
 )
 
+const IconKey = () => (
+  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
+    <circle cx="8" cy="15" r="5" />
+    <path d="M14.5 9.5L21 3" />
+    <path d="M19 5l2 2" />
+    <path d="M16 8l2 2" />
+  </svg>
+)
+
+const IconProfile = () => (
+  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" />
+    <circle cx="12" cy="7" r="4" />
+  </svg>
+)
+
+const IconActivity = () => (
+  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
+    <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+  </svg>
+)
+
 function SidebarLink({ to, icon, children }) {
   return (
     <NavLink
@@ -136,10 +160,44 @@ const sectionLabel = {
   fontFamily: "'Rajdhani', sans-serif",
 }
 
+function UserAvatar({ avatarUrl, displayName, size = 32 }) {
+  const initials = (displayName || '??').slice(0, 2).toUpperCase()
+  if (avatarUrl) {
+    return (
+      <img
+        src={avatarUrl}
+        alt={displayName}
+        style={{
+          width: size, height: size, borderRadius: '50%', objectFit: 'cover', flexShrink: 0,
+          border: '1px solid rgba(0,255,136,0.2)',
+          boxShadow: '0 0 8px rgba(0,255,136,0.1)',
+        }}
+      />
+    )
+  }
+  return (
+    <div
+      style={{
+        width: size, height: size, borderRadius: '50%', flexShrink: 0,
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        fontSize: size < 32 ? '10px' : '12px', fontWeight: 700,
+        backgroundColor: 'rgba(0,255,136,0.1)',
+        color: '#00ff88',
+        border: '1px solid rgba(0,255,136,0.2)',
+        fontFamily: "'Rajdhani', sans-serif",
+      }}
+    >
+      {initials}
+    </div>
+  )
+}
+
 export default function AppShell() {
   const { currentUser } = useAuth()
   const { rights } = useRights()
   const location = useLocation()
+  const navigate = useNavigate()
+  const [showChangePw, setShowChangePw] = useState(false)
 
   const isAdmin = currentUser?.user_type === 'ADMIN' || currentUser?.user_type === 'SUPERADMIN'
 
@@ -147,8 +205,7 @@ export default function AppShell() {
     supabase.auth.signOut()
   }
 
-  const displayName = currentUser?.username || currentUser?.email || ''
-  const initials = displayName.slice(0, 2).toUpperCase()
+  const displayName = currentUser?.displayName || currentUser?.username || currentUser?.email || ''
 
   return (
     <div className="flex min-h-screen" style={{ backgroundColor: '#050a0f' }}>
@@ -228,6 +285,9 @@ export default function AppShell() {
                   <SidebarLink to="/admin" icon={<IconCog />}>Admin</SidebarLink>
                 )}
                 {isAdmin && (
+                  <SidebarLink to="/audit-log" icon={<IconActivity />}>Audit Log</SidebarLink>
+                )}
+                {isAdmin && (
                   <SidebarLink to="/deleted-items" icon={<IconTrash />}>Deleted Items</SidebarLink>
                 )}
               </div>
@@ -235,40 +295,51 @@ export default function AppShell() {
           )}
         </nav>
 
-        {/* User footer */}
-        <div
-          className="flex-shrink-0 px-4 py-3 flex items-center gap-2.5"
-          style={{ borderTop: '1px solid rgba(0,229,255,0.06)' }}
-        >
-          <div
-            className="w-8 h-8 rounded-full flex-shrink-0 flex items-center justify-center text-xs font-bold"
-            style={{
-              backgroundColor: 'rgba(0,255,136,0.1)',
-              color: '#00ff88',
-              border: '1px solid rgba(0,255,136,0.2)',
-              fontFamily: "'Rajdhani', sans-serif",
-            }}
-          >
-            {initials}
-          </div>
-          <div className="flex-1 min-w-0">
-            <p className="text-sm font-medium truncate leading-tight" style={{ color: '#c8dff5' }}>
-              {currentUser?.username || currentUser?.email}
-            </p>
-            <div className="mt-0.5">
-              <UserBadge type={currentUser?.user_type} />
-            </div>
-          </div>
+        {/* Sidebar bottom: My Profile + Logout */}
+        <div style={{ borderTop: '1px solid rgba(0,229,255,0.06)' }}>
+          {/* My Profile link */}
           <button
-            onClick={handleLogout}
-            title="Logout"
-            className="flex-shrink-0 transition-colors duration-150 cursor-pointer p-1 rounded"
-            style={{ color: '#1e3a52' }}
-            onMouseEnter={e => e.currentTarget.style.color = '#ff4d6a'}
-            onMouseLeave={e => e.currentTarget.style.color = '#1e3a52'}
+            onClick={() => navigate('/profile')}
+            className="w-full flex items-center gap-2.5 text-sm transition-colors duration-150 cursor-pointer"
+            style={{
+              padding: '10px 20px',
+              color: location.pathname === '/profile' ? '#00ff88' : '#2a5a7e',
+              borderLeft: location.pathname === '/profile' ? '2px solid #00ff88' : '2px solid transparent',
+              backgroundColor: location.pathname === '/profile' ? 'rgba(0,255,136,0.06)' : 'transparent',
+            }}
+            onMouseEnter={e => { if (location.pathname !== '/profile') e.currentTarget.style.color = '#c8dff5' }}
+            onMouseLeave={e => { if (location.pathname !== '/profile') e.currentTarget.style.color = '#2a5a7e' }}
           >
-            <IconLogout />
+            <span className="flex-shrink-0 opacity-80"><IconProfile /></span>
+            My Profile
           </button>
+
+          {/* User footer */}
+          <div
+            className="px-4 py-3 flex items-center gap-2.5 cursor-pointer"
+            onClick={() => navigate('/profile')}
+            title="View profile"
+          >
+            <UserAvatar avatarUrl={currentUser?.avatarUrl} displayName={displayName} size={32} />
+            <div className="flex-1 min-w-0">
+              <p className="text-sm font-medium truncate leading-tight" style={{ color: '#c8dff5' }}>
+                {displayName}
+              </p>
+              <div className="mt-0.5">
+                <UserBadge type={currentUser?.user_type} />
+              </div>
+            </div>
+            <button
+              onClick={e => { e.stopPropagation(); handleLogout() }}
+              title="Logout"
+              className="flex-shrink-0 transition-colors duration-150 cursor-pointer p-1 rounded"
+              style={{ color: '#1e3a52' }}
+              onMouseEnter={e => e.currentTarget.style.color = '#ff4d6a'}
+              onMouseLeave={e => e.currentTarget.style.color = '#1e3a52'}
+            >
+              <IconLogout />
+            </button>
+          </div>
         </div>
       </aside>
 
@@ -286,13 +357,46 @@ export default function AppShell() {
           <p className="text-sm font-bold text-white lg:hidden" style={{ fontFamily: "'Rajdhani', sans-serif" }}>Hope, Inc. SMS</p>
           <div className="hidden lg:block" />
           <div className="flex items-center gap-3">
-            <div className="text-right hidden sm:block">
-              <p className="text-sm font-medium leading-tight" style={{ color: '#c8dff5' }}>
-                {currentUser?.username || currentUser?.email}
-              </p>
-              <p className="text-xs leading-tight" style={{ color: '#1e3a52' }}>{currentUser?.email}</p>
-            </div>
-            <UserBadge type={currentUser?.user_type} />
+            {/* Avatar + name — clicking navigates to profile */}
+            <button
+              onClick={() => navigate('/profile')}
+              className="flex items-center gap-2.5 cursor-pointer transition-opacity duration-150"
+              style={{ background: 'none', border: 'none', padding: 0 }}
+              onMouseEnter={e => e.currentTarget.style.opacity = '0.8'}
+              onMouseLeave={e => e.currentTarget.style.opacity = '1'}
+              title="My Profile"
+            >
+              <UserAvatar avatarUrl={currentUser?.avatarUrl} displayName={displayName} size={32} />
+              <div className="text-right hidden sm:block">
+                <p className="text-sm font-medium leading-tight" style={{ color: '#c8dff5' }}>
+                  {displayName}
+                </p>
+                <div className="flex justify-end mt-0.5">
+                  <UserBadge type={currentUser?.user_type} />
+                </div>
+              </div>
+            </button>
+
+            {/* Change Password */}
+            <button
+              onClick={() => setShowChangePw(true)}
+              title="Change Password"
+              className="flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-semibold transition-colors duration-150 cursor-pointer"
+              style={{
+                borderRadius: '6px',
+                border: '1px solid rgba(0,229,255,0.15)',
+                color: '#2a5a7e',
+                backgroundColor: 'transparent',
+                fontFamily: "'Rajdhani', sans-serif",
+                letterSpacing: '0.04em',
+              }}
+              onMouseEnter={e => { e.currentTarget.style.backgroundColor = 'rgba(0,229,255,0.07)'; e.currentTarget.style.color = '#00e5ff'; e.currentTarget.style.borderColor = 'rgba(0,229,255,0.3)' }}
+              onMouseLeave={e => { e.currentTarget.style.backgroundColor = 'transparent'; e.currentTarget.style.color = '#2a5a7e'; e.currentTarget.style.borderColor = 'rgba(0,229,255,0.15)' }}
+            >
+              <IconKey />
+              <span className="hidden sm:inline">Password</span>
+            </button>
+
             <button
               onClick={handleLogout}
               className="px-3 py-1.5 text-xs font-semibold transition-colors duration-150 cursor-pointer"
@@ -329,6 +433,8 @@ export default function AppShell() {
           </div>
         </main>
       </div>
+
+      {showChangePw && <ChangePasswordModal onClose={() => setShowChangePw(false)} />}
     </div>
   )
 }
