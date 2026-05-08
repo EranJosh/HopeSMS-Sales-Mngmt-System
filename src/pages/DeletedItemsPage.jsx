@@ -1,9 +1,11 @@
 // DeletedItemsPage -- Transactions tab + Line Items tab; Recover buttons; sidebar link hidden for USER -- Micole Kurt Gonda
 import { useEffect, useState } from 'react'
 import { Navigate } from 'react-router-dom'
+import toast from 'react-hot-toast'
 import { useAuth } from '../context/AuthContext'
 import { getDeletedSales, recoverSale } from '../services/salesService'
 import { getDeletedDetailLines, recoverDetailLine } from '../services/salesDetailService'
+import LoadingSpinner from '../components/LoadingSpinner'
 
 const fmt = n => n != null
   ? new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(n)
@@ -57,10 +59,11 @@ export default function DeletedItemsPage() {
   async function handleRecoverSale(transno) {
     setRecovering(transno)
     try {
-      await recoverSale(transno)
+      await recoverSale(transno, currentUser)
+      toast.success('Transaction recovered')
       await fetchData()
     } catch (err) {
-      alert('Recovery failed: ' + err.message)
+      toast.error('Failed to recover transaction. Please try again.')
     } finally {
       setRecovering(null)
     }
@@ -70,10 +73,11 @@ export default function DeletedItemsPage() {
     const key = `${transno}-${prodcode}`
     setRecovering(key)
     try {
-      await recoverDetailLine(transno, prodcode)
+      await recoverDetailLine(transno, prodcode, currentUser)
+      toast.success('Line item recovered')
       await fetchData()
     } catch (err) {
-      alert('Recovery failed: ' + err.message)
+      toast.error('Failed to recover line item. Please try again.')
     } finally {
       setRecovering(null)
     }
@@ -123,9 +127,7 @@ export default function DeletedItemsPage() {
       </div>
 
       {loading ? (
-        <div className="flex items-center justify-center py-20">
-          <div className="rounded-full animate-spin" style={{ width: 32, height: 32, borderWidth: 3, borderStyle: 'solid', borderColor: '#00ff88', borderTopColor: 'transparent', boxShadow: '0 0 12px rgba(0,255,136,0.3)' }} />
-        </div>
+        <LoadingSpinner message="Loading deleted items..." />
       ) : error ? (
         <div className="px-4 py-3 rounded-xl text-sm font-medium" style={{ backgroundColor: 'rgba(255,77,106,0.08)', border: '1px solid rgba(255,77,106,0.2)', color: '#ff4d6a' }}>{error}</div>
       ) : tab === 'transactions' ? (
@@ -146,14 +148,10 @@ export default function DeletedItemsPage() {
               <tbody>
                 {deletedSales.length === 0 ? (
                   <tr>
-                    <td colSpan={7} className="py-14 text-center">
-                      <div className="flex flex-col items-center gap-2">
-                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="rgba(0,229,255,0.15)" strokeWidth="1.5" strokeLinecap="round">
-                          <polyline points="3 6 5 6 21 6" />
-                          <path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a1 1 0 011-1h4a1 1 0 011 1v2" />
-                        </svg>
-                        <span className="text-sm" style={{ color: '#1e3a52' }}>No deleted transactions</span>
-                      </div>
+                    <td colSpan={7} className="py-16 text-center">
+                    <div className="text-4xl mb-3">🗑️</div>
+                    <p className="font-medium" style={{ color: '#3a6882' }}>No deleted transactions</p>
+                    <p className="text-sm mt-1" style={{ color: '#2a5a7e' }}>Soft-deleted transactions will appear here</p>
                     </td>
                   </tr>
                 ) : deletedSales.map(s => (
@@ -210,14 +208,10 @@ export default function DeletedItemsPage() {
               <tbody>
                 {deletedLines.length === 0 ? (
                   <tr>
-                    <td colSpan={7} className="py-14 text-center">
-                      <div className="flex flex-col items-center gap-2">
-                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="rgba(0,229,255,0.15)" strokeWidth="1.5" strokeLinecap="round">
-                          <polyline points="3 6 5 6 21 6" />
-                          <path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a1 1 0 011-1h4a1 1 0 011 1v2" />
-                        </svg>
-                        <span className="text-sm" style={{ color: '#1e3a52' }}>No deleted line items</span>
-                      </div>
+                    <td colSpan={7} className="py-16 text-center">
+                    <div className="text-4xl mb-3">🗑️</div>
+                    <p className="font-medium" style={{ color: '#3a6882' }}>No deleted line items</p>
+                    <p className="text-sm mt-1" style={{ color: '#2a5a7e' }}>Soft-deleted line items will appear here</p>
                     </td>
                   </tr>
                 ) : deletedLines.map(l => {
