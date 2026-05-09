@@ -1,5 +1,6 @@
 /** @module salesService - getSales(userType), createSale(), updateSale(), softDeleteSale() triggers cascade, recoverSale() triggers cascade restore */
 import { supabase } from '../lib/supabaseClient'
+import { logAction } from './auditService'
 
 const stamp = (action) =>
   `${action} ${new Date().toISOString().slice(0, 19).replace('T', ' ')}`
@@ -29,7 +30,7 @@ export async function getDeletedSales() {
   return data || []
 }
 
-export async function createSale({ salesdate, custno, empno }) {
+export async function createSale({ salesdate, custno, empno }, currentUser) {
   // Generate next transNo
   const { data: maxRow } = await supabase
     .from('sales')
@@ -48,32 +49,36 @@ export async function createSale({ salesdate, custno, empno }) {
     .single()
 
   if (error) throw error
+  if (currentUser) await logAction(currentUser, 'CREATE', 'sales', transno, `Created transaction ${transno}`)
   return data
 }
 
-export async function updateSale(transno, { salesdate, custno, empno }) {
+export async function updateSale(transno, { salesdate, custno, empno }, currentUser) {
   const { error } = await supabase
     .from('sales')
     .update({ salesdate, custno, empno })
     .eq('transno', transno)
 
   if (error) throw error
+  if (currentUser) await logAction(currentUser, 'EDIT', 'sales', transno, `Edited transaction ${transno}`)
 }
 
-export async function softDeleteSale(transno) {
+export async function softDeleteSale(transno, currentUser) {
   const { error } = await supabase
     .from('sales')
     .update({ record_status: 'INACTIVE', stamp: stamp('DELETED') })
     .eq('transno', transno)
 
   if (error) throw error
+  if (currentUser) await logAction(currentUser, 'SOFT_DELETE', 'sales', transno, `Soft-deleted transaction ${transno}`)
 }
 
-export async function recoverSale(transno) {
+export async function recoverSale(transno, currentUser) {
   const { error } = await supabase
     .from('sales')
     .update({ record_status: 'ACTIVE', stamp: stamp('RECOVERED') })
     .eq('transno', transno)
 
   if (error) throw error
+  if (currentUser) await logAction(currentUser, 'RECOVER', 'sales', transno, `Recovered transaction ${transno}`)
 }
