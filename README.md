@@ -264,7 +264,16 @@ src/
 
 ## Screenshots
 
-> Screenshots coming soon — visit the live app at https://hope-sales.vercel.app
+Live app: https://hope-sales.vercel.app
+
+| | |
+|---|---|
+| ![Dashboard](docs/screenshots/dashboard.webp)<br/><sub>Dashboard: KPIs, monthly revenue trend, top products, latest transactions</sub> | ![Sales transactions](docs/screenshots/transactions.webp)<br/><sub>Sales transactions: filters, export, edit and soft-delete</sub> |
+| ![Transaction detail](docs/screenshots/transaction-detail.webp)<br/><sub>Transaction detail: line items, price autofill, grand total</sub> | ![Reports](docs/screenshots/reports.webp)<br/><sub>Reports: four SQL-view reports with charts</sub> |
+| ![Customer lookup](docs/screenshots/customer-lookup.webp)<br/><sub>Customer lookup: read-only table</sub> | ![Price history](docs/screenshots/price-history.webp)<br/><sub>Price history: read-only, latest price per product</sub> |
+| ![Deleted items](docs/screenshots/deleted-items.webp)<br/><sub>Deleted items: soft-deleted records with Recover</sub> | ![Admin](docs/screenshots/admin.webp)<br/><sub>Admin: activate or deactivate users; SUPERADMIN is protected</sub> |
+
+> The screenshots were captured by running this repository's code locally in the SUPERADMIN role against the seed data in [`docs/HopeDB (3).sql`](docs/HopeDB%20(3).sql) (Hope, Inc., a fictitious company). The four users on the Admin page are placeholder demo accounts.
 
 ---
 
