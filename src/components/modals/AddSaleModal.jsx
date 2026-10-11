@@ -21,10 +21,9 @@ export default function AddSaleModal({ onClose, onSuccess }) {
   const [error, setError] = useState('')
 
   useEffect(() => {
-    setLoadingOptions(true)
     Promise.all([getCustomers(), getEmployees()])
       .then(([c, e]) => { setCustomers(c); setEmployees(e) })
-      .catch(() => {})
+      .catch(() => setError('Could not load customers and employees. Close this window and try again.'))
       .finally(() => setLoadingOptions(false))
   }, [])
 
@@ -55,18 +54,18 @@ export default function AddSaleModal({ onClose, onSuccess }) {
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <label className={labelClass} style={labelStyle}>Sales Date</label>
-          <input type="date" required value={salesdate} onChange={e => setSalesdate(e.target.value)} className="w-full rounded-lg px-3.5 py-2.5 text-sm outline-none transition-colors duration-150" />
+          <input type="date" required value={salesdate} onChange={e => setSalesdate(e.target.value)} className="w-full rounded-lg px-3.5 py-2.5 text-sm outline-hidden transition-colors duration-150" />
         </div>
         <div>
           <label className={labelClass} style={labelStyle}>Customer</label>
-          <select required value={custno} onChange={e => setCustno(e.target.value)} className="w-full rounded-lg px-3.5 py-2.5 text-sm outline-none transition-colors duration-150" disabled={loadingOptions}>
+          <select required value={custno} onChange={e => setCustno(e.target.value)} className="w-full rounded-lg px-3.5 py-2.5 text-sm outline-hidden transition-colors duration-150" disabled={loadingOptions}>
             <option value="">{loadingOptions ? 'Loading options...' : 'Select customer'}</option>
             {customers.map(c => <option key={c.custno} value={c.custno}>{c.custname}</option>)}
           </select>
         </div>
         <div>
           <label className={labelClass} style={labelStyle}>Sales Agent</label>
-          <select required value={empno} onChange={e => setEmpno(e.target.value)} className="w-full rounded-lg px-3.5 py-2.5 text-sm outline-none transition-colors duration-150" disabled={loadingOptions}>
+          <select required value={empno} onChange={e => setEmpno(e.target.value)} className="w-full rounded-lg px-3.5 py-2.5 text-sm outline-hidden transition-colors duration-150" disabled={loadingOptions}>
             <option value="">{loadingOptions ? 'Loading options...' : 'Select employee'}</option>
             {employees.map(e => <option key={e.empno} value={e.empno}>{e.lastname}, {e.firstname}</option>)}
           </select>

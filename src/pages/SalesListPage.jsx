@@ -43,7 +43,7 @@ function FilterInput({ type = 'text', value, onChange, placeholder, label }) {
         value={value}
         onChange={onChange}
         placeholder={placeholder}
-        className="px-3 py-2 text-sm rounded-lg outline-none transition-colors duration-150"
+        className="px-3 py-2 text-sm rounded-lg outline-hidden transition-colors duration-150"
         style={focused
           ? { backgroundColor: '#070f1e', border: '1px solid rgba(0,255,136,0.4)', color: '#c8dff5', boxShadow: '0 0 0 3px rgba(0,255,136,0.07)' }
           : { backgroundColor: '#070f1e', border: '1px solid rgba(0,229,255,0.12)', color: '#c8dff5' }
@@ -129,15 +129,19 @@ export default function SalesListPage() {
   const [showAdd, setShowAdd] = useState(false)
   const [editSale, setEditSale] = useState(null)
   const [deleteSale, setDeleteSale] = useState(null)
-  const [currentPage, setCurrentPage] = useState(1)
+  const [pageState, setPageState] = useState({ key: '', page: 1 })
 
   const isAdmin = currentUser?.user_type === 'ADMIN' || currentUser?.user_type === 'SUPERADMIN'
 
   async function fetchSales() {
     setLoading(true)
     setError(null)
+    await loadSales(currentUser?.user_type)
+  }
+
+  async function loadSales(userType) {
     try {
-      const data = await getSales(currentUser?.user_type)
+      const data = await getSales(userType)
       setSales(data)
     } catch (err) {
       setError(err.message)
@@ -146,7 +150,8 @@ export default function SalesListPage() {
     }
   }
 
-  useEffect(() => { fetchSales() }, [])
+  // Reload when the signed-in user's type is known or changes (it decides which rows are visible).
+  useEffect(() => { loadSales(currentUser?.user_type) }, [currentUser?.user_type])
 
   const filtered = useMemo(() => {
     return sales.filter(s => {
@@ -158,7 +163,9 @@ export default function SalesListPage() {
   }, [sales, dateFrom, dateTo, custSearch])
 
   const filterKey = `${dateFrom}|${dateTo}|${custSearch}`
-  useMemo(() => { setCurrentPage(1) }, [filterKey])
+  // Page resets to 1 whenever a filter changes, without a state update during render.
+  const currentPage = pageState.key === filterKey ? pageState.page : 1
+  const setCurrentPage = (page) => setPageState({ key: filterKey, page })
 
   const { sortedData: sortedFiltered, sortField, sortDir, handleSort } = useSortableTable(filtered)
 

@@ -27,7 +27,6 @@ const CARD_STYLE = {
 }
 
 const TH_STYLE = { backgroundColor: '#0d1f36', borderBottom: '1px solid rgba(0,229,255,0.08)' }
-const TH_TEXT = { color: '#3a6882', fontFamily: "'Rajdhani', sans-serif", letterSpacing: '0.1em', fontWeight: 700 }
 
 export default function SalesDetailPage() {
   const { transNo } = useParams()
@@ -48,6 +47,10 @@ export default function SalesDetailPage() {
   async function fetchData() {
     setLoading(true)
     setError(null)
+    await loadData()
+  }
+
+  async function loadData() {
     try {
       const [{ data: saleRow }, detail] = await Promise.all([
         supabase.from('sales_with_lookup').select('*').eq('transno', transNo).single(),
@@ -62,7 +65,8 @@ export default function SalesDetailPage() {
     }
   }
 
-  useEffect(() => { fetchData() }, [transNo])
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => { loadData() }, [transNo])
 
   const grandTotal = lines.reduce((sum, l) => sum + (Number(l.linetotal) || 0), 0)
   const itemCount = lines.length

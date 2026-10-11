@@ -20,7 +20,6 @@ export default function CustomerTransactionHistoryModal({ customer, onClose }) {
   const [error, setError] = useState(null)
 
   useEffect(() => {
-    setLoading(true)
     getTransactionsByCustomer(customer.custno)
       .then(setTransactions)
       .catch(err => setError(err.message))
@@ -55,7 +54,7 @@ export default function CustomerTransactionHistoryModal({ customer, onClose }) {
       >
         {/* Header */}
         <div
-          className="flex-shrink-0 px-6 py-4 flex items-center justify-between"
+          className="shrink-0 px-6 py-4 flex items-center justify-between"
           style={{ borderBottom: '1px solid rgba(0,229,255,0.08)', backgroundColor: '#0d1f36', borderRadius: '16px 16px 0 0' }}
         >
           <div>
@@ -84,7 +83,7 @@ export default function CustomerTransactionHistoryModal({ customer, onClose }) {
 
         {/* Summary cards */}
         {!loading && !error && (
-          <div className="flex-shrink-0 px-6 py-4 grid grid-cols-3 gap-4" style={{ borderBottom: '1px solid rgba(0,229,255,0.06)' }}>
+          <div className="shrink-0 px-6 py-4 grid grid-cols-3 gap-4" style={{ borderBottom: '1px solid rgba(0,229,255,0.06)' }}>
             {[
               { label: 'Total Transactions', value: transactions.length, color: '#c8dff5' },
               { label: 'Total Revenue', value: fmt(totalRevenue), color: '#00ff88' },
@@ -160,7 +159,7 @@ export default function CustomerTransactionHistoryModal({ customer, onClose }) {
 
         {/* Footer */}
         {!loading && !error && transactions.length > 0 && (
-          <div className="flex-shrink-0 px-5 py-3" style={{ borderTop: '1px solid rgba(0,229,255,0.05)', backgroundColor: '#0d1f36', borderRadius: '0 0 16px 16px' }}>
+          <div className="shrink-0 px-5 py-3" style={{ borderTop: '1px solid rgba(0,229,255,0.05)', backgroundColor: '#0d1f36', borderRadius: '0 0 16px 16px' }}>
             <span className="text-xs" style={{ color: '#1e3a52' }}>
               <span className="font-bold" style={{ color: '#4d7a9e' }}>{transactions.length}</span> transaction{transactions.length !== 1 ? 's' : ''} · Click a row to open transaction
             </span>

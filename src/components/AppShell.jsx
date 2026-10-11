@@ -112,7 +112,7 @@ function SidebarLink({ to, icon, children }) {
       to={to}
       className={({ isActive }) =>
         `flex items-center gap-2.5 text-sm transition-colors duration-150 cursor-pointer ${
-          isActive ? 'font-semibold' : 'hover:bg-white/[0.03]'
+          isActive ? 'font-semibold' : 'hover:bg-white/3'
         }`
       }
       style={({ isActive }) => ({
@@ -125,7 +125,7 @@ function SidebarLink({ to, icon, children }) {
       onMouseEnter={e => { if (!e.currentTarget.classList.contains('font-semibold')) e.currentTarget.style.color = '#c8dff5' }}
       onMouseLeave={e => { if (!e.currentTarget.classList.contains('font-semibold')) e.currentTarget.style.color = '#2a5a7e' }}
     >
-      <span className="flex-shrink-0 opacity-80">{icon}</span>
+      <span className="shrink-0 opacity-80">{icon}</span>
       {children}
     </NavLink>
   )
@@ -212,7 +212,7 @@ export default function AppShell() {
 
       {/* Left Sidebar */}
       <aside
-        className="flex-shrink-0 flex flex-col overflow-hidden"
+        className="shrink-0 flex flex-col overflow-hidden"
         style={{
           width: '240px',
           backgroundColor: '#060c18',
@@ -222,11 +222,11 @@ export default function AppShell() {
       >
         {/* Brand mark */}
         <div
-          className="px-5 py-4 flex items-center gap-3 flex-shrink-0"
+          className="px-5 py-4 flex items-center gap-3 shrink-0"
           style={{ borderBottom: '1px solid rgba(0,229,255,0.06)' }}
         >
           <div
-            className="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0 font-bold text-xs"
+            className="w-7 h-7 rounded-lg flex items-center justify-center shrink-0 font-bold text-xs"
             style={{
               backgroundColor: 'rgba(0,255,136,0.12)',
               color: '#00ff88',
@@ -310,7 +310,7 @@ export default function AppShell() {
             onMouseEnter={e => { if (location.pathname !== '/profile') e.currentTarget.style.color = '#c8dff5' }}
             onMouseLeave={e => { if (location.pathname !== '/profile') e.currentTarget.style.color = '#2a5a7e' }}
           >
-            <span className="flex-shrink-0 opacity-80"><IconProfile /></span>
+            <span className="shrink-0 opacity-80"><IconProfile /></span>
             My Profile
           </button>
 
@@ -332,7 +332,7 @@ export default function AppShell() {
             <button
               onClick={e => { e.stopPropagation(); handleLogout() }}
               title="Logout"
-              className="flex-shrink-0 transition-colors duration-150 cursor-pointer p-1 rounded"
+              className="shrink-0 transition-colors duration-150 cursor-pointer p-1 rounded-sm"
               style={{ color: '#1e3a52' }}
               onMouseEnter={e => e.currentTarget.style.color = '#ff4d6a'}
               onMouseLeave={e => e.currentTarget.style.color = '#1e3a52'}
@@ -347,7 +347,7 @@ export default function AppShell() {
       <div className="flex-1 flex flex-col overflow-hidden">
         {/* Top bar */}
         <header
-          className="flex-shrink-0 px-6 h-14 flex items-center justify-between"
+          className="shrink-0 px-6 h-14 flex items-center justify-between"
           style={{
             backgroundColor: '#080f1c',
             borderBottom: '1px solid rgba(0,229,255,0.06)',

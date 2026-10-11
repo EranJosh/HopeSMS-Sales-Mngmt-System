@@ -253,7 +253,7 @@ export default function ProfilePage() {
       {/* Profile Header Card */}
       <div className="mb-5 p-6 flex items-center gap-6" style={CARD_STYLE}>
         {/* Avatar with upload */}
-        <div className="flex flex-col items-center gap-2 flex-shrink-0">
+        <div className="flex flex-col items-center gap-2 shrink-0">
           <UserAvatar avatarUrl={currentUser?.avatarUrl} displayName={displayName} size={72} uploading={avatarUploading} />
           <input
             ref={fileInputRef}

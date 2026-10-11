@@ -22,7 +22,6 @@ export default function EmployeePerformanceModal({ employee, onClose }) {
   const [error, setError] = useState(null)
 
   useEffect(() => {
-    setLoading(true)
     Promise.all([
       getTransactionsByEmployee(employee.empno),
       getEmployeeStats(employee.empno),
@@ -65,7 +64,7 @@ export default function EmployeePerformanceModal({ employee, onClose }) {
       >
         {/* Header */}
         <div
-          className="flex-shrink-0 px-6 py-4 flex items-center justify-between"
+          className="shrink-0 px-6 py-4 flex items-center justify-between"
           style={{ borderBottom: '1px solid rgba(0,229,255,0.08)', backgroundColor: '#0d1f36', borderRadius: '16px 16px 0 0' }}
         >
           <div>
@@ -96,7 +95,7 @@ export default function EmployeePerformanceModal({ employee, onClose }) {
 
         {/* Stats cards */}
         {!loading && !error && (
-          <div className="flex-shrink-0 px-6 py-4 grid grid-cols-2 sm:grid-cols-4 gap-4" style={{ borderBottom: '1px solid rgba(0,229,255,0.06)' }}>
+          <div className="shrink-0 px-6 py-4 grid grid-cols-2 sm:grid-cols-4 gap-4" style={{ borderBottom: '1px solid rgba(0,229,255,0.06)' }}>
             {[
               { label: 'Total Transactions', value: totalTxns, color: '#c8dff5' },
               { label: 'Total Revenue', value: fmt(totalRev), color: '#00ff88' },
@@ -163,7 +162,7 @@ export default function EmployeePerformanceModal({ employee, onClose }) {
 
         {/* Footer */}
         {!loading && !error && transactions.length > 0 && (
-          <div className="flex-shrink-0 px-5 py-3" style={{ borderTop: '1px solid rgba(0,229,255,0.05)', backgroundColor: '#0d1f36', borderRadius: '0 0 16px 16px' }}>
+          <div className="shrink-0 px-5 py-3" style={{ borderTop: '1px solid rgba(0,229,255,0.05)', backgroundColor: '#0d1f36', borderRadius: '0 0 16px 16px' }}>
             <span className="text-xs" style={{ color: '#1e3a52' }}>
               <span className="font-bold" style={{ color: '#4d7a9e' }}>{transactions.length}</span> transaction{transactions.length !== 1 ? 's' : ''} · Click a row to open transaction
             </span>

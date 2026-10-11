@@ -16,7 +16,6 @@ const CARD_STYLE = {
 }
 
 const TH_STYLE = { backgroundColor: '#0d1f36', borderBottom: '1px solid rgba(0,229,255,0.08)' }
-const TH_TEXT = { color: '#3a6882', fontFamily: "'Rajdhani', sans-serif", letterSpacing: '0.1em', fontWeight: 700 }
 
 const TYPE_STYLE = {
   SUPERADMIN: { bg: 'rgba(0,255,136,0.1)', color: '#00ff88', border: '1px solid rgba(0,255,136,0.2)' },
@@ -50,7 +49,7 @@ function FilterInput({ label, value, onChange, placeholder, type = 'text' }) {
         value={value}
         onChange={onChange}
         placeholder={placeholder}
-        className="px-3 py-2 text-sm rounded-lg outline-none"
+        className="px-3 py-2 text-sm rounded-lg outline-hidden"
         style={focused
           ? { backgroundColor: '#070f1e', border: '1px solid rgba(0,255,136,0.4)', color: '#c8dff5', boxShadow: '0 0 0 3px rgba(0,255,136,0.07)' }
           : { backgroundColor: '#070f1e', border: '1px solid rgba(0,229,255,0.12)', color: '#c8dff5' }
@@ -80,10 +79,15 @@ function exportAuditToExcel(rows) {
 
 export default function AuditLogPage() {
   const { currentUser } = useAuth()
-  const navigate = useNavigate()
 
   const isAdmin = currentUser?.user_type === 'ADMIN' || currentUser?.user_type === 'SUPERADMIN'
   if (!isAdmin) return <Navigate to="/sales" replace />
+
+  return <AuditLogContent />
+}
+
+function AuditLogContent() {
+  const navigate = useNavigate()
 
   const [logs, setLogs] = useState([])
   const [loading, setLoading] = useState(true)
@@ -92,10 +96,13 @@ export default function AuditLogPage() {
   const [userFilter, setUserFilter] = useState('')
   const [dateFrom, setDateFrom] = useState('')
   const [dateTo, setDateTo] = useState('')
-  const [page, setPage] = useState(1)
+  // Page resets to 1 whenever a filter changes, without a state update during render.
+  const filterKey = `${actionFilter}|${userFilter}|${dateFrom}|${dateTo}`
+  const [pageState, setPageState] = useState({ key: filterKey, page: 1 })
+  const page = pageState.key === filterKey ? pageState.page : 1
+  const setPage = (next) => setPageState({ key: filterKey, page: typeof next === 'function' ? next(page) : next })
 
   useEffect(() => {
-    setLoading(true)
     getAuditLog(500)
       .then(setLogs)
       .catch(err => setError(err.message))
@@ -111,8 +118,6 @@ export default function AuditLogPage() {
       return true
     })
   }, [logs, actionFilter, userFilter, dateFrom, dateTo])
-
-  useMemo(() => { setPage(1) }, [actionFilter, userFilter, dateFrom, dateTo])
 
   // Default sort: created_at descending (newest first)
   const { sortedData: sortedFiltered, sortField, sortDir, handleSort } = useSortableTable(filtered, 'created_at', 'desc')
@@ -164,7 +169,7 @@ export default function AuditLogPage() {
           <select
             value={actionFilter}
             onChange={e => setActionFilter(e.target.value)}
-            className="px-3 py-2 text-sm rounded-lg outline-none"
+            className="px-3 py-2 text-sm rounded-lg outline-hidden"
             style={{ backgroundColor: '#070f1e', border: '1px solid rgba(0,229,255,0.12)', color: '#c8dff5', minWidth: 140 }}
           >
             <option value="">All Actions</option>

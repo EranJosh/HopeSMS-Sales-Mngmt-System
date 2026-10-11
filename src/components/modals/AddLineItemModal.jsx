@@ -19,8 +19,10 @@ export default function AddLineItemModal({ transno, onClose, onSuccess }) {
   const [error, setError] = useState('')
 
   useEffect(() => {
-    setLoadingOptions(true)
-    getProducts().then(setProducts).catch(() => {}).finally(() => setLoadingOptions(false))
+    getProducts()
+      .then(setProducts)
+      .catch(() => setError('Could not load products. Close this window and try again.'))
+      .finally(() => setLoadingOptions(false))
   }, [])
 
   async function handleProductChange(code) {
@@ -57,7 +59,7 @@ export default function AddLineItemModal({ transno, onClose, onSuccess }) {
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <label className={labelClass} style={labelStyle}>Product</label>
-          <select required value={prodcode} onChange={e => handleProductChange(e.target.value)} className="w-full rounded-lg px-3.5 py-2.5 text-sm outline-none transition-colors duration-150" disabled={loadingOptions}>
+          <select required value={prodcode} onChange={e => handleProductChange(e.target.value)} className="w-full rounded-lg px-3.5 py-2.5 text-sm outline-hidden transition-colors duration-150" disabled={loadingOptions}>
             <option value="">{loadingOptions ? 'Loading options...' : 'Select product'}</option>
             {products.map(p => <option key={p.prodcode} value={p.prodcode}>{p.prodcode} - {p.description}</option>)}
           </select>
@@ -68,7 +70,7 @@ export default function AddLineItemModal({ transno, onClose, onSuccess }) {
         </div>
         <div>
           <label className={labelClass} style={labelStyle}>Quantity</label>
-          <input type="number" required min="0.01" step="0.01" value={quantity} onChange={e => setQuantity(e.target.value)} placeholder="e.g. 5" className="w-full rounded-lg px-3.5 py-2.5 text-sm outline-none transition-colors duration-150" />
+          <input type="number" required min="0.01" step="0.01" value={quantity} onChange={e => setQuantity(e.target.value)} placeholder="e.g. 5" className="w-full rounded-lg px-3.5 py-2.5 text-sm outline-hidden transition-colors duration-150" />
         </div>
         <div className="flex justify-end gap-3 pt-2">
           <button type="button" onClick={onClose} className="px-4 py-2 text-sm font-bold rounded-lg transition-colors duration-150 cursor-pointer" style={{ border: '1px solid rgba(0,229,255,0.12)', color: '#4d7a9e', backgroundColor: 'transparent', fontFamily: "'Rajdhani', sans-serif" }} onMouseEnter={e => { e.currentTarget.style.backgroundColor = 'rgba(0,229,255,0.06)'; e.currentTarget.style.color = '#c8dff5' }} onMouseLeave={e => { e.currentTarget.style.backgroundColor = 'transparent'; e.currentTarget.style.color = '#4d7a9e' }}>Cancel</button>
