@@ -306,6 +306,23 @@ Live app: https://hope-sales.vercel.app
 
 ---
 
+## Security Checks
+
+Every push and pull request runs `.github/workflows/security.yml`, and it re-runs every Monday so new advisories are caught without code changes:
+
+| Check | What it catches |
+|---|---|
+| `npm audit --audit-level=high` | Known vulnerabilities in dependencies; fails on high or critical |
+| CodeQL (`security-extended`) | Injection, XSS, unsafe data flows and other code-level issues in the JavaScript |
+| Gitleaks | Passwords, API keys and tokens committed anywhere in the git history |
+| Lint, test, build | Hook-order bugs and broken builds before they reach Vercel |
+
+Dependabot (`.github/dependabot.yml`) opens weekly pull requests for npm updates and monthly ones for GitHub Actions. Database access is enforced by RLS policies (migrations 007, 009 and 011).
+
+Run the dependency check locally with `npm audit`.
+
+---
+
 ## Branching Strategy
 
 | Branch | Purpose |
