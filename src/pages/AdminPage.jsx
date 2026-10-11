@@ -204,7 +204,7 @@ function AdminPageContent() {
             placeholder="Search by username or email..."
             value={search}
             onChange={e => setSearch(e.target.value)}
-            className="pl-8 pr-3 py-2 text-sm rounded-lg outline-none"
+            className="pl-8 pr-3 py-2 text-sm rounded-lg outline-hidden"
             style={searchFocused
               ? { backgroundColor: '#070f1e', border: '1px solid rgba(0,255,136,0.4)', color: '#c8dff5', boxShadow: '0 0 0 3px rgba(0,255,136,0.07)', minWidth: 240 }
               : { backgroundColor: '#070f1e', border: '1px solid rgba(0,229,255,0.12)', color: '#c8dff5', minWidth: 240 }

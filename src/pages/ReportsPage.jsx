@@ -371,7 +371,7 @@ export default function ReportsPage() {
                       type="month"
                       value={fromMonth}
                       onChange={e => setFromMonth(e.target.value)}
-                      className="text-xs px-2 py-1 rounded-lg outline-none transition-colors duration-150"
+                      className="text-xs px-2 py-1 rounded-lg outline-hidden transition-colors duration-150"
                       style={{ backgroundColor: '#070f1e', border: '1px solid rgba(0,229,255,0.12)', color: '#c8dff5' }}
                     />
                     <label className="text-xs font-medium" style={{ color: '#2a5a7e' }}>To</label>
@@ -379,7 +379,7 @@ export default function ReportsPage() {
                       type="month"
                       value={toMonth}
                       onChange={e => setToMonth(e.target.value)}
-                      className="text-xs px-2 py-1 rounded-lg outline-none transition-colors duration-150"
+                      className="text-xs px-2 py-1 rounded-lg outline-hidden transition-colors duration-150"
                       style={{ backgroundColor: '#070f1e', border: '1px solid rgba(0,229,255,0.12)', color: '#c8dff5' }}
                     />
                     {(fromMonth || toMonth) && (

@@ -16,7 +16,7 @@ function FormInput({ type, value, onChange, placeholder, required, minLength }) 
       value={value}
       onChange={onChange}
       placeholder={placeholder}
-      className="w-full px-3.5 py-2.5 text-sm rounded-lg outline-none transition-colors duration-150"
+      className="w-full px-3.5 py-2.5 text-sm rounded-lg outline-hidden transition-colors duration-150"
       style={focused
         ? { backgroundColor: '#070f1e', border: '1px solid rgba(0,255,136,0.4)', color: '#c8dff5', boxShadow: '0 0 0 3px rgba(0,255,136,0.07)' }
         : { backgroundColor: '#070f1e', border: '1px solid rgba(0,229,255,0.12)', color: '#c8dff5' }

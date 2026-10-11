@@ -49,7 +49,7 @@ function FilterInput({ label, value, onChange, placeholder, type = 'text' }) {
         value={value}
         onChange={onChange}
         placeholder={placeholder}
-        className="px-3 py-2 text-sm rounded-lg outline-none"
+        className="px-3 py-2 text-sm rounded-lg outline-hidden"
         style={focused
           ? { backgroundColor: '#070f1e', border: '1px solid rgba(0,255,136,0.4)', color: '#c8dff5', boxShadow: '0 0 0 3px rgba(0,255,136,0.07)' }
           : { backgroundColor: '#070f1e', border: '1px solid rgba(0,229,255,0.12)', color: '#c8dff5' }
@@ -169,7 +169,7 @@ function AuditLogContent() {
           <select
             value={actionFilter}
             onChange={e => setActionFilter(e.target.value)}
-            className="px-3 py-2 text-sm rounded-lg outline-none"
+            className="px-3 py-2 text-sm rounded-lg outline-hidden"
             style={{ backgroundColor: '#070f1e', border: '1px solid rgba(0,229,255,0.12)', color: '#c8dff5', minWidth: 140 }}
           >
             <option value="">All Actions</option>
