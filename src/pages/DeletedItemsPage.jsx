@@ -33,6 +33,10 @@ export default function DeletedItemsPage() {
     return <Navigate to="/sales" replace />
   }
 
+  return <DeletedItemsContent currentUser={currentUser} />
+}
+
+function DeletedItemsContent({ currentUser }) {
   const [tab, setTab] = useState('transactions')
   const [deletedSales, setDeletedSales] = useState([])
   const [deletedLines, setDeletedLines] = useState([])
@@ -43,6 +47,10 @@ export default function DeletedItemsPage() {
   async function fetchData() {
     setLoading(true)
     setError(null)
+    await loadData()
+  }
+
+  async function loadData() {
     try {
       const [sales, lines] = await Promise.all([getDeletedSales(), getDeletedDetailLines()])
       setDeletedSales(sales)
@@ -54,7 +62,7 @@ export default function DeletedItemsPage() {
     }
   }
 
-  useEffect(() => { fetchData() }, [])
+  useEffect(() => { loadData() }, [])
 
   async function handleRecoverSale(transno) {
     setRecovering(transno)
@@ -62,7 +70,7 @@ export default function DeletedItemsPage() {
       await recoverSale(transno, currentUser)
       toast.success('Transaction recovered')
       await fetchData()
-    } catch (err) {
+    } catch {
       toast.error('Failed to recover transaction. Please try again.')
     } finally {
       setRecovering(null)
@@ -76,7 +84,7 @@ export default function DeletedItemsPage() {
       await recoverDetailLine(transno, prodcode, currentUser)
       toast.success('Line item recovered')
       await fetchData()
-    } catch (err) {
+    } catch {
       toast.error('Failed to recover line item. Please try again.')
     } finally {
       setRecovering(null)

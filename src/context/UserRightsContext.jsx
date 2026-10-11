@@ -22,77 +22,57 @@ const ALL_RIGHTS = {
 
 export default function UserRightsProvider({ children }) {
   const { currentUser } = useAuth()
-  const [rights, setRights] = useState({})
-  const [rightsLoading, setRightsLoading] = useState(false)
+  // Rights fetched for one user id; anything else is derived, so the effect never sets state synchronously.
+  const [fetched, setFetched] = useState({ forId: null, rights: {} })
+
+  const userId = currentUser?.id ?? null
+  // SUPERADMIN always has every right, no DB query needed. This also acts as a safety net if the
+  // 004_superadmin_seed migration ran with ON CONFLICT DO NOTHING and didn't overwrite a USER-provisioned row.
+  const isSuperAdmin = currentUser?.user_type === 'SUPERADMIN'
+  const needsQuery = Boolean(userId) && !isSuperAdmin
 
   useEffect(() => {
-    if (!currentUser) {
-      setRights({})
-      setRightsLoading(false)
-      return
-    }
-
-    // SUPERADMIN always has every right  no DB query needed.
-    // This also acts as a safety net if the 004_superadmin_seed migration ran
-    // with ON CONFLICT DO NOTHING and didn't overwrite a USER-provisioned row.
-    if (currentUser.user_type === 'SUPERADMIN') {
-      setRights(ALL_RIGHTS)
-      setRightsLoading(false)
-      return
-    }
+    if (!needsQuery) return
 
     let cancelled = false
+    const finish = (map) => { if (!cancelled) { cancelled = true; setFetched({ forId: userId, rights: map }) } }
+
+    const timeoutId = setTimeout(() => {
+      if (!cancelled) console.error('[UserRightsContext] Rights query timed out after 5s, proceeding with empty rights')
+      finish({})
+    }, RIGHTS_TIMEOUT_MS)
 
     async function loadRights() {
-      // Table name: PostgreSQL folds unquoted identifiers to lowercase.
-      // The table was created as "UserModule_Rights"  stored as "usermodule_rights".
-      setRightsLoading(true)
-
-      const timeoutId = setTimeout(() => {
-        if (!cancelled) {
-          console.error('[UserRightsContext] Rights query timed out after 5s  proceeding with empty rights')
-          cancelled = true
-          setRights({})
-          setRightsLoading(false)
-        }
-      }, RIGHTS_TIMEOUT_MS)
-
       try {
+        // Table name: PostgreSQL folds unquoted identifiers to lowercase ("UserModule_Rights" is stored as "usermodule_rights").
         const { data, error } = await supabase
-          .from('usermodule_rights')          // lowercase  matches PostgreSQL storage
-          .select('rightid, right_value')     // lowercase column names
-          .eq('userid', currentUser.id)
-
-        if (cancelled) {
-          clearTimeout(timeoutId)
-          return
-        }
-
-        clearTimeout(timeoutId)
+          .from('usermodule_rights')
+          .select('rightid, right_value')
+          .eq('userid', userId)
 
         if (error) {
           console.error('[UserRightsContext] Rights query error:', error.message)
-          setRights({})
-        } else if (data) {
+          finish({})
+        } else {
           const map = {}
-          data.forEach(r => { map[r.rightid] = r.right_value })
-          setRights(map)
+          ;(data || []).forEach(r => { map[r.rightid] = r.right_value })
+          finish(map)
         }
       } catch (err) {
         console.error('[UserRightsContext] Rights query threw:', err)
-        clearTimeout(timeoutId)
-        if (!cancelled) setRights({})
+        finish({})
       } finally {
-        if (!cancelled) {
-          setRightsLoading(false)
-        }
+        clearTimeout(timeoutId)
       }
     }
 
     loadRights()
 
-    return () => { cancelled = true }
-  }, [currentUser])
+    return () => { cancelled = true; clearTimeout(timeoutId) }
+  }, [needsQuery, userId])
+
+  const rights = !userId ? {} : isSuperAdmin ? ALL_RIGHTS : fetched.forId === userId ? fetched.rights : {}
+  const rightsLoading = needsQuery && fetched.forId !== userId
 
   return (
     <UserRightsContext.Provider value={{ rights, rightsLoading }}>

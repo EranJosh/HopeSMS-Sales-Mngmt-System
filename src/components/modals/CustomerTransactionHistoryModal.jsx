@@ -20,7 +20,6 @@ export default function CustomerTransactionHistoryModal({ customer, onClose }) {
   const [error, setError] = useState(null)
 
   useEffect(() => {
-    setLoading(true)
     getTransactionsByCustomer(customer.custno)
       .then(setTransactions)
       .catch(err => setError(err.message))

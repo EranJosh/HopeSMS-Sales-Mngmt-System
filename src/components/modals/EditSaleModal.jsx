@@ -21,10 +21,9 @@ export default function EditSaleModal({ sale, onClose, onSuccess }) {
   const [error, setError] = useState('')
 
   useEffect(() => {
-    setLoadingOptions(true)
     Promise.all([getCustomers(), getEmployees()])
       .then(([c, e]) => { setCustomers(c); setEmployees(e) })
-      .catch(() => {})
+      .catch(() => setError('Could not load customers and employees. Close this window and try again.'))
       .finally(() => setLoadingOptions(false))
   }, [])
 

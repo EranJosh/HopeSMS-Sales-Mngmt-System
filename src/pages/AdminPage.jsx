@@ -97,11 +97,16 @@ function RoleConfirmDialog({ username, newRole, onConfirm, onCancel }) {
 
 export default function AdminPage() {
   const { rights } = useRights()
-  const { currentUser } = useAuth()
 
   if (rights.ADM_USER !== 1) {
     return <Navigate to="/sales" replace />
   }
+
+  return <AdminPageContent />
+}
+
+function AdminPageContent() {
+  const { currentUser } = useAuth()
 
   const [users, setUsers] = useState([])
   const [loading, setLoading] = useState(true)
@@ -117,6 +122,10 @@ export default function AdminPage() {
   async function fetchUsers() {
     setLoading(true)
     setError(null)
+    await loadUsers()
+  }
+
+  async function loadUsers() {
     try {
       setUsers(await getUsers())
     } catch (err) {
@@ -126,7 +135,7 @@ export default function AdminPage() {
     }
   }
 
-  useEffect(() => { fetchUsers() }, [])
+  useEffect(() => { loadUsers() }, [])
 
   async function handleAction(userId, action) {
     const targetUser = users.find(u => u.userid === userId)
@@ -140,7 +149,7 @@ export default function AdminPage() {
         toast.success(`${targetUser?.username || userId} has been deactivated`)
       }
       await fetchUsers()
-    } catch (err) {
+    } catch {
       toast.error('Failed to update user. Please try again.')
     } finally {
       setActioning(null)
@@ -156,7 +165,7 @@ export default function AdminPage() {
       await changeUserRole(userId, newRole, currentUser)
       toast.success(`${username} role changed to ${newRole}`)
       await fetchUsers()
-    } catch (err) {
+    } catch {
       toast.error('Failed to change role. Please try again.')
     } finally {
       setRoleChanging(null)

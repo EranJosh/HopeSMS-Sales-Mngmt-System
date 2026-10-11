@@ -149,7 +149,7 @@ function KpiCard({ label, countEnd, format, iconKey, color, glow, delay }) {
 }
 
 // ── Top Product Row ───────────────────────────────────────────
-function ProductBar({ rank, name, revenue, maxRevenue, delay, color }) {
+function ProductBar({ rank, name, revenue, maxRevenue, delay }) {
   const [width, setWidth] = useState(0)
   const pct = maxRevenue > 0 ? (revenue / maxRevenue) * 100 : 0
 
@@ -236,7 +236,7 @@ export default function DashboardPage() {
       })
       .catch(e => setError(e.message))
       .finally(() => setLoading(false))
-  }, [])
+  }, [currentUser?.user_type])
 
   // ── Derived data ─────────────────────────────────────────────
   const activeSales = useMemo(() => sales.filter(s => s.record_status === 'ACTIVE'), [sales])

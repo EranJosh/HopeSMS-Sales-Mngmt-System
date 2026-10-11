@@ -19,8 +19,10 @@ export default function AddLineItemModal({ transno, onClose, onSuccess }) {
   const [error, setError] = useState('')
 
   useEffect(() => {
-    setLoadingOptions(true)
-    getProducts().then(setProducts).catch(() => {}).finally(() => setLoadingOptions(false))
+    getProducts()
+      .then(setProducts)
+      .catch(() => setError('Could not load products. Close this window and try again.'))
+      .finally(() => setLoadingOptions(false))
   }, [])
 
   async function handleProductChange(code) {

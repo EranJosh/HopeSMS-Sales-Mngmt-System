@@ -22,7 +22,6 @@ export default function EmployeePerformanceModal({ employee, onClose }) {
   const [error, setError] = useState(null)
 
   useEffect(() => {
-    setLoading(true)
     Promise.all([
       getTransactionsByEmployee(employee.empno),
       getEmployeeStats(employee.empno),

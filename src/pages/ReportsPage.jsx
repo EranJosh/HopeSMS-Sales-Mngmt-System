@@ -15,7 +15,6 @@ const NEON_GREEN = '#00ff88'
 const NEON_CYAN = '#00e5ff'
 const NEON_GOLD = '#ffd24d'
 const GRID_COLOR = 'rgba(0,229,255,0.06)'
-const BAR_DIM = 'rgba(0,229,255,0.25)'
 
 // Gradient color scale: highest bar = neon green, lowest = neon cyan, opacity fades
 function scaleColor(i, total) {
@@ -174,7 +173,6 @@ export default function ReportsPage() {
   const [toMonth, setToMonth] = useState('')
 
   useEffect(() => {
-    setLoading(true)
     Promise.all([
       getSalesByEmployee(),
       getSalesByCustomer(),
