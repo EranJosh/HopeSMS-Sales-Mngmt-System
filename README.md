@@ -82,7 +82,7 @@ Software Engineering 2 | Section 3BSCS-1 | Academic Year 2025–2026
 | Member | Roles |
 |--------|-------|
 | Eran Josh Reyes | M1 Project Lead \| M3 DB Engineer \| M4 Rights & Auth \| M5 QA/Docs |
-| Micole Kurt Gonda | M2 Frontend Developer \| M5 QA/Docs |
+| Micole Kurt Gonda | M2 Full-Stack Developer (application pages and CRUD flows on Supabase, transaction and line-item modals with price autofill, reports, user administration, auth callback and Vercel deployment fixes) \| M5 QA/Docs (39-case rights test matrix, RLS and cascade tests, user manual) |
 
 ---
 
@@ -179,6 +179,7 @@ Open your Supabase project → **SQL Editor** and run these files in order:
 | 8 | `db/migrations/008_sql_views.sql` | 6 SQL views for UI and reports |
 | 9 | `db/migrations/009_rls_user_table.sql` | RLS on user and RBAC tables |
 | 10 | `db/migrations/010_grants.sql` | GRANT SELECT/INSERT/UPDATE to authenticated role on all tables and views |
+| 11 | `db/migrations/011_view_security_invoker.sql` | Views run as the calling user (`security_invoker`) so RLS applies to reports; pins `search_path` on the signup trigger |
 
 See [db/README.md](db/README.md) for full migration details and SUPERADMIN setup steps.
 
@@ -266,12 +267,40 @@ src/
 
 Live app: https://hope-sales.vercel.app
 
+### Sign in and registration
+
 | | |
 |---|---|
-| ![Dashboard](docs/screenshots/dashboard.webp)<br/><sub>Dashboard: KPIs, monthly revenue trend, top products, latest transactions</sub> | ![Sales transactions](docs/screenshots/transactions.webp)<br/><sub>Sales transactions: filters, export, edit and soft-delete</sub> |
-| ![Transaction detail](docs/screenshots/transaction-detail.webp)<br/><sub>Transaction detail: line items, price autofill, grand total</sub> | ![Reports](docs/screenshots/reports.webp)<br/><sub>Reports: four SQL-view reports with charts</sub> |
-| ![Customer lookup](docs/screenshots/customer-lookup.webp)<br/><sub>Customer lookup: read-only table</sub> | ![Price history](docs/screenshots/price-history.webp)<br/><sub>Price history: read-only, latest price per product</sub> |
-| ![Deleted items](docs/screenshots/deleted-items.webp)<br/><sub>Deleted items: soft-deleted records with Recover</sub> | ![Admin](docs/screenshots/admin.webp)<br/><sub>Admin: activate or deactivate users; SUPERADMIN is protected</sub> |
+| ![Login](docs/screenshots/login.webp)<br/><sub>Login: email and password or Google sign-in</sub> | ![Registration](docs/screenshots/register.webp)<br/><sub>Registration: new accounts start INACTIVE until an admin activates them</sub> |
+
+### Dashboard and sales
+
+| | |
+|---|---|
+| ![Dashboard](docs/screenshots/dashboard.webp)<br/><sub>Dashboard: KPIs, monthly revenue trend, top products, latest transactions</sub> | ![Sales transactions](docs/screenshots/transactions.webp)<br/><sub>Sales transactions: date and customer filters, export, edit and soft-delete</sub> |
+| ![Add transaction](docs/screenshots/add-transaction.webp)<br/><sub>Add transaction: customer and employee lookups, rights-gated</sub> | ![Transaction detail](docs/screenshots/transaction-detail.webp)<br/><sub>Transaction detail: line items, price autofill, grand total, PDF export</sub> |
+
+### Lookups (read-only)
+
+| | |
+|---|---|
+| ![Customers](docs/screenshots/customer-lookup.webp)<br/><sub>Customers: read-only lookup, click a row for history</sub> | ![Customer history](docs/screenshots/customer-history.webp)<br/><sub>Customer history: transactions and revenue for one customer</sub> |
+| ![Employees](docs/screenshots/employee-lookup.webp)<br/><sub>Employees: read-only lookup with performance view</sub> | ![Products](docs/screenshots/product-lookup.webp)<br/><sub>Products: read-only lookup with current price</sub> |
+| ![Price history](docs/screenshots/price-history.webp)<br/><sub>Price history: every price change per product</sub> |  |
+
+### Reports
+
+| | |
+|---|---|
+| ![Reports](docs/screenshots/reports.webp)<br/><sub>Reports: revenue by employee (SQL view)</sub> | ![Reports](docs/screenshots/reports-customer.webp)<br/><sub>Reports: revenue by customer</sub> |
+| ![Reports](docs/screenshots/reports-products.webp)<br/><sub>Reports: top products sold</sub> | ![Reports](docs/screenshots/reports-monthly.webp)<br/><sub>Reports: monthly sales trend with month filter</sub> |
+
+### Administration
+
+| | |
+|---|---|
+| ![Deleted items](docs/screenshots/deleted-items.webp)<br/><sub>Deleted items: soft-deleted records with Recover</sub> | ![User administration](docs/screenshots/admin.webp)<br/><sub>User administration: activate, deactivate and change roles; SUPERADMIN is protected</sub> |
+| ![Audit log](docs/screenshots/audit-log.webp)<br/><sub>Audit log: every create, edit, delete, recover and activation, with Excel export</sub> | ![My profile](docs/screenshots/profile.webp)<br/><sub>My profile: account details and the rights assigned to the user</sub> |
 
 > The screenshots were captured by running this repository's code locally in the SUPERADMIN role against the seed data in [`docs/HopeDB (3).sql`](docs/HopeDB%20(3).sql) (Hope, Inc., a fictitious company). The four users on the Admin page are placeholder demo accounts.
 
